@@ -1,0 +1,50 @@
+.bg-1, .bg-2, .bg-3 {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  min-height: 475px;
+  width: 100%;
+}
+.bg-1 {
+  background-image: url('/images/slider/1.jpg');
+}
+.bg-2 {
+  background-image: url('/images/slider/2.jpg');
+}
+.bg-3 {
+  background-image: url('/images/slider/3.jpg');
+}
+/* Custom Arrows */
+.owl-carousel .owl-nav {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+}
+
+.owl-carousel .owl-nav button {
+  background: rgba(255, 255, 255, 0.5) !important;
+  color: #000 !important;
+  font-size: 24px !important;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.owl-carousel .owl-nav button:hover {
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.owl-carousel .owl-nav button.owl-prev {
+  margin-left: 20px;
+}
+
+.owl-carousel .owl-nav button.owl-next {
+  margin-right: 20px;
+}
