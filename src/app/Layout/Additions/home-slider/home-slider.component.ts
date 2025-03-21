@@ -15,7 +15,11 @@ export class HomeSliderComponent {
     loop: true,
     autoplay: true,
     autoplayTimeout: 5000,
-    nav: false,
+    nav: true, // Enable navigation buttons
+    navText: [
+      '<i class="fa fa-chevron-left fs-4"></i>', // Custom left arrow
+      '<i class="fa fa-chevron-right fs-4"></i>' // Custom right arrow
+    ],
     dots: false,
     responsive: {
       0: { items: 1 },

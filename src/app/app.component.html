@@ -1,5 +1,11 @@
-<app-navbar></app-navbar>
-<app-sec-nav-bar></app-sec-nav-bar>
-<app-third-nav-bar></app-third-nav-bar>
-<app-home></app-home>
-<router-outlet></router-outlet>
+<div class="d-flex flex-column min-vh-100">
+    <app-navbar></app-navbar>
+    <app-sec-nav-bar></app-sec-nav-bar>
+    <app-third-nav-bar></app-third-nav-bar>
+  
+    <div class="flex-grow-1">
+      <router-outlet></router-outlet>
+    </div>
+  
+    <app-footer></app-footer>
+  </div>
