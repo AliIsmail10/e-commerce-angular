@@ -10,7 +10,7 @@ export const routes: Routes = [
     { path: 'about', loadComponent: () => import('./Layout/Pages/about/about.component').then(m => m.AboutComponent) },
     { path: 'contact', loadComponent: () => import('./Layout/Pages/contact/contact.component').then(m => m.ContactComponent) },
     { path: 'cart', loadComponent: () => import('./Layout/Pages/cart/cart.component').then(m => m.CartComponent) },
-    { path: 'categorires', loadComponent: () => import('./Layout/Pages/categories/categories.component').then(m => m.CategoriesComponent) },
+    { path: 'categories', loadComponent: () => import('./Layout/Pages/categories/categories.component').then(m => m.CategoriesComponent) },
     { path: 'brandDeatils/:id', loadComponent: () => import('./Layout/Pages/details-brand/details-brand.component').then(m => m.DetailsBrandComponent) },
     { path: 'productDetails/:id', loadComponent: () => import('./Layout/Pages/product-detials/product-detials.component').then(m => m.ProductDetialsComponent) },
     { path: 'categoryDetails/:id', loadComponent: () => import('./Layout/Pages/specific-category/specific-category.component').then(m => m.SpecificCategoryComponent) },
