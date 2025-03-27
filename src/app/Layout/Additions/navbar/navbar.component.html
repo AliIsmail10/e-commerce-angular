@@ -18,7 +18,17 @@
               <ul class="ht-menu">
                 <li *ngIf="userName">
                   <span>Hello, {{ userName }}!</span>
-                  <a class="btn btn-warning btn-sm ms-2" (click)="logout()">Logout</a>
+                  <a class="btn btn-warning btn-sm ms-2" (click)="logout()"
+                    >Logout</a
+                  >
+                </li>
+                <li *ngIf="!userName">
+                  <a
+                    class="btn btn-warning btn-sm ms-2"
+                    routerLink="/register"
+                    routerLinkActive="active"
+                    >Register</a
+                  >
                 </li>
 
                 <li>

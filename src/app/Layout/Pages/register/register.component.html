@@ -1,1 +1,120 @@
-<p>register works!</p>
+<div class="container d-flex justify-content-center align-items-center my-5">
+    <div class="card p-4 shadow-lg" style="width: 400px">
+      <h3 class="text-center mb-3">Register</h3>
+  
+      <div *ngIf="errorMessage" class="alert alert-danger text-center">
+        {{ errorMessage }}
+      </div>
+  
+      <form (submit)="onSubmit()" [formGroup]="registerForm">
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input
+            type="text"
+            id="name"
+            class="form-control"
+            formControlName="name"
+            name="name"
+          />
+        </div>
+        <div *ngIf="registerForm.controls['name'].touched && registerForm.controls['name'].invalid"
+             class="text-danger mt-1">
+          <div *ngIf="registerForm.controls['name'].errors?.['required']">
+            Name is required.
+          </div>
+          <div *ngIf="registerForm.controls['name'].errors?.['minlength']">
+            Minimum 3 characters required.
+          </div>
+        </div>
+  
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            formControlName="email"
+            name="email"
+          />
+        </div>
+        <div *ngIf="registerForm.controls['email'].touched && registerForm.controls['email'].invalid"
+             class="text-danger mt-1">
+          <div *ngIf="registerForm.controls['email'].errors?.['required']">
+            Email is required.
+          </div>
+          <div *ngIf="registerForm.controls['email'].errors?.['email']">
+            Enter a valid email address.
+          </div>
+        </div>
+  
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone</label>
+          <input
+            type="text"
+            id="phone"
+            class="form-control"
+            formControlName="phone"
+            name="phone"
+          />
+        </div>
+        <div *ngIf="registerForm.controls['phone'].touched && registerForm.controls['phone'].invalid"
+             class="text-danger mt-1">
+          <div *ngIf="registerForm.controls['phone'].errors?.['required']">
+            Phone is required.
+          </div>
+          <div *ngIf="registerForm.controls['phone'].errors?.['pattern']">
+            Enter a valid phone number.
+          </div>
+        </div>
+  
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            formControlName="password"
+            name="password"
+          />
+        </div>
+        <div *ngIf="registerForm.controls['password'].touched && registerForm.controls['password'].invalid"
+             class="text-danger mt-1">
+          <div *ngIf="registerForm.controls['password'].errors?.['required']">
+            Password is required.
+          </div>
+          <div *ngIf="registerForm.controls['password'].errors?.['minlength']">
+            Minimum 6 characters required.
+          </div>
+        </div>
+  
+        <div class="mb-3">
+          <label for="rePassword" class="form-label">Confirm Password</label>
+          <input
+            type="password"
+            id="rePassword"
+            class="form-control"
+            formControlName="rePassword"
+            name="rePassword"
+          />
+        </div>
+        <div *ngIf="registerForm.controls['rePassword'].touched && registerForm.controls['rePassword'].invalid"
+             class="text-danger mt-1">
+          <div *ngIf="registerForm.controls['rePassword'].errors?.['required']">
+            Confirm Password is required.
+          </div>
+          <div *ngIf="registerForm.controls['rePassword'].errors?.['mustMatch']">
+            Passwords must match.
+          </div>
+        </div>
+  
+        <button
+          type="submit"
+          class="btn btn-warning w-100"
+          [disabled]="registerForm.invalid"
+        >
+          Register
+        </button>
+      </form>
+    </div>
+  </div>
+  
