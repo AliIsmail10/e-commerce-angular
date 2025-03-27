@@ -26,6 +26,7 @@
     "jquery-nice-select": "^1.1.0",
     "jquery-ui": "^1.14.1",
     "jquery-ui-dist": "^1.13.3",
+    "jwt-decode": "^4.0.0",
     "magnific-popup": "^1.2.0",
     "material-design-iconic-font": "^2.2.0",
     "modernizr": "^3.13.1",
