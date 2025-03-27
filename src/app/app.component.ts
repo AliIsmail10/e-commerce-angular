@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from "./Layout/Additions/navbar/navbar.component";
 import { SecNavBarComponent } from "./Layout/Additions/sec-nav-bar/sec-nav-bar.component";
 import { ThirdNavBarComponent } from "./Layout/Additions/third-nav-bar/third-nav-bar.component";
-import { HomeComponent } from "./Layout/Pages/home/home.component";
 import jQuery from 'jquery';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { FooterComponent } from "./Layout/Additions/footer/footer.component"; 

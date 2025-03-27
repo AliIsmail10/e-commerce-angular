@@ -1,0 +1,11 @@
+.custom-card-wrapper {
+    width: 70%; 
+    max-width: 180px; 
+    margin: 0 auto;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.custom-card-wrapper:hover {
+    transform: scale(0.95); 
+}
