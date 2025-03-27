@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { BrandsService } from '../../../Shared/Services/brands/brands.service';
 import { CategoryService } from '../../../Shared/Services/category/category.service';
 import { ProductService } from '../../../Shared/Services/product/product.service';
+import { ProductCartComponent } from '../product-cart/product-cart.component';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [ CommonModule,ProductCartComponent],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css',
 })
@@ -19,7 +19,7 @@ export class ProductsComponent implements OnInit {
 
   showMoreBrands = false;
   showMoreCategories = false;
-  visibleBrands: any[] = [];
+  visibleBrands: any[] = [];   
   visibleCategories: any[] = [];
 
   constructor(
