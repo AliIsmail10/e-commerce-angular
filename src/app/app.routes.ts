@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './Layout/Pages/home/home.component';
 import { NotFoundComponent } from './Layout/Additions/not-found/not-found.component';
+import { AuthGuard } from './Shared/Guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -37,6 +38,8 @@ export const routes: Routes = [
     path: 'cart',
     loadComponent: () =>
       import('./Layout/Pages/cart/cart.component').then((m) => m.CartComponent),
+    canActivate: [AuthGuard],
+    data: { role: 'user' },
   },
   {
     path: 'categories',

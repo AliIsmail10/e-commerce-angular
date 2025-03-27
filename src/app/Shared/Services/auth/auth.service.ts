@@ -43,7 +43,7 @@ export class AuthService {
 
   deCodeUserData() {
     const token = localStorage.getItem('userToken');
-    // this.userData.next(jwtDecode(JSON.stringify(token)));
+    //  this.userData.next(jwtDecode(JSON.stringify(token)));
 
     if (token) {
       const decodedUser: any = jwtDecode(token);
@@ -71,5 +71,12 @@ export class AuthService {
       `https://ecommerce.routemisr.com/api/v1/auth/resetPassword`,
       restData
     );
+  }
+
+  getUserData() {
+    const user =
+      this.userData.value ||
+      JSON.parse(localStorage.getItem('userData') || 'null');
+    return user && Object.keys(user).length ? user : null;
   }
 }
