@@ -154,8 +154,17 @@
                     Total <span>${{ total() }}</span>
                   </li>
                 </ul>
-                <a href="#">Proceed to Checkout</a>
-                <button class="btn btn-danger" (click)="clearCart()">
+
+                <a
+                  href="checkout.html"
+                  class="btn btn-primary w-75 h-25 mx-2 my-2"
+                  >Proceed to Checkout</a
+                >
+
+                <button
+                  class="btn btn-danger w-75 h-25 mx-2 my-2"
+                  (click)="clearCart()"
+                >
                   Clear Cart
                 </button>
               </div>
