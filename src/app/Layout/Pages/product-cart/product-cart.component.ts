@@ -4,23 +4,25 @@ import { Router, RouterLink } from '@angular/router';
 import { SharedService } from '../../../Shared/shared/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { WishlistService } from '../../../Shared/Services/wishlist/wishlist.service';
+import { CartService } from '../../../Shared/Services/cart/cart.service';
 
 @Component({
   selector: 'app-product-cart',
-  imports: [RouterLink,CommonModule],
+  imports: [RouterLink, CommonModule],
   templateUrl: './product-cart.component.html',
-  styleUrl: './product-cart.component.css'
+  styleUrl: './product-cart.component.css',
 })
 export class ProductCartComponent implements OnInit {
   @Input() product: any;
   wishlistProductIds: string[] = [];
-  
+
   constructor(
     public _WishlistService: WishlistService,
     public sharedService: SharedService,
     private renderer: Renderer2,
     private toastr: ToastrService,
-    private el: ElementRef
+    private el: ElementRef,
+    private _CartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +47,8 @@ export class ProductCartComponent implements OnInit {
 
   private updateWishlistIcons() {
     setTimeout(() => {
-      const wishlistButtons = this.el.nativeElement.querySelectorAll('.wishlist-btn');
+      const wishlistButtons =
+        this.el.nativeElement.querySelectorAll('.wishlist-btn');
       wishlistButtons.forEach((button: HTMLElement) => {
         const productId = button.getAttribute('data-product-id');
         const icon = button.querySelector('i');
@@ -61,45 +64,59 @@ export class ProductCartComponent implements OnInit {
     this.renderer.removeClass(icon, isInWishlist ? 'fa-heart-o' : 'fa-heart');
     this.renderer.addClass(icon, isInWishlist ? 'fa-heart' : 'fa-heart-o');
     this.renderer.setStyle(icon, 'color', isInWishlist ? 'red' : 'gray');
-}
-
-toggleWishlist(productId: string, event: Event) {
-  event.stopPropagation();
-  if (!productId) return;
-  
-  const button = event.currentTarget as HTMLElement;
-  const iconElement = button.querySelector('i');
-  if (!iconElement) return;
-
-  if (!this.wishlistProductIds.includes(productId)) {
-    this.renderer.addClass(button, 'added');
-    setTimeout(() => this.renderer.removeClass(button, 'added'), 500);
   }
 
-  const isInWishlist = this.wishlistProductIds.includes(productId);
-  
-  if (isInWishlist) {
-    this._WishlistService.RemoveProductFromWishlist(productId).subscribe({
-      next: () => {
-        this.wishlistProductIds = this.wishlistProductIds.filter(id => id !== productId);
-        this.updateIconStyle(iconElement, false);
-        this.toastr.error('Removed from wishlist');
+  toggleWishlist(productId: string, event: Event) {
+    event.stopPropagation();
+    if (!productId) return;
+
+    const button = event.currentTarget as HTMLElement;
+    const iconElement = button.querySelector('i');
+    if (!iconElement) return;
+
+    if (!this.wishlistProductIds.includes(productId)) {
+      this.renderer.addClass(button, 'added');
+      setTimeout(() => this.renderer.removeClass(button, 'added'), 500);
+    }
+
+    const isInWishlist = this.wishlistProductIds.includes(productId);
+
+    if (isInWishlist) {
+      this._WishlistService.RemoveProductFromWishlist(productId).subscribe({
+        next: () => {
+          this.wishlistProductIds = this.wishlistProductIds.filter(
+            (id) => id !== productId
+          );
+          this.updateIconStyle(iconElement, false);
+          this.toastr.error('Removed from wishlist');
+        },
+        error: (err) => this.toastr.error('Failed to remove from wishlist'),
+      });
+    } else {
+      this._WishlistService.AddProductToWishlist(productId).subscribe({
+        next: () => {
+          this.wishlistProductIds = [...this.wishlistProductIds, productId];
+          this.updateIconStyle(iconElement, true);
+          this.toastr.success('Added to wishlist');
+        },
+        error: (err) => this.toastr.error('Failed to add to wishlist'),
+      });
+    }
+  }
+
+  addToCart(productId: string) {
+    if (!productId) return;
+
+    this._CartService.AddProducttoCart(productId).subscribe({
+      next: (response) => {
+        this.toastr.success('Product added to cart successfully!');
+
+        this._CartService.cartItem.next(this._CartService.cartItem.value + 1);
       },
-      error: (err) => this.toastr.error('Failed to remove from wishlist')
-    });
-  } else {
-    this._WishlistService.AddProductToWishlist(productId).subscribe({
-      next: () => {
-        this.wishlistProductIds = [...this.wishlistProductIds, productId];
-        this.updateIconStyle(iconElement, true);
-        this.toastr.success('Added to wishlist');
+      error: (err) => {
+        this.toastr.error('Failed to add product to cart');
+        console.error('Add to cart error:', err);
       },
-      error: (err) => this.toastr.error('Failed to add to wishlist')
     });
   }
-}
-
-
-
-
 }
