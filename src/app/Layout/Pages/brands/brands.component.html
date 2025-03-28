@@ -1,1 +1,17 @@
-<p>brands works!</p>
+<div class="container mt-4">
+    <h2 class="brands-heading">Brands</h2>
+  
+    <div class="row">
+      <div *ngFor="let brand of brands" class="col-md-4 mb-3">
+        <a [routerLink]="['/products']" [queryParams]="{ brand: brand._id }" class="brand-card-link">
+          <div class="card brand-card shadow-sm">
+            <img [src]="brand.image" class="card-img-top" [alt]="brand.name">
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ brand.name }}</h5>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  

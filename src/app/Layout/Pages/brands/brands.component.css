@@ -1,0 +1,57 @@
+.brands-heading {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffc107;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    position: relative;
+    display: inline-block;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Bottom glowing line effect */
+  .brands-heading::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    width: 120px;
+    height: 6px;
+    background: #ffc107;
+    border-radius: 3px;
+    transform: translateX(-50%);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+    transition: width 0.3s ease-in-out;
+  }
+  
+  .brands-heading:hover::after {
+    width: 160px;
+  }
+  
+  /* Brand card styling */
+  .brand-card {
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+  }
+  
+  .brand-card img {
+    max-height: 200px;
+    object-fit: contain;
+    padding: 10px;
+    background: white;
+  }
+  
+  .brand-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .brand-card-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
