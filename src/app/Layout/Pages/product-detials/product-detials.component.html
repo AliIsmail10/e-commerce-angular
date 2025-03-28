@@ -1,1 +1,128 @@
-<p>product-detials works!</p>
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <ul>
+                <li><a [routerLink]="['/home']" routerLinkActive="router-link-active" >Home</a></li>
+                <li class="active">Single Product</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="content-wraper">
+    <div class="container">
+        <div class="row single-product-area">
+            <div class="col-lg-5 col-md-6">
+                <div class="product-details-left">
+                    <div class="product-details-images slider-navigation-1">
+                        <div class="lg-image">
+                            <a class="popup-img venobox vbox-item" data-gall="myGallery">
+                                <img [src]="productDetail?.imageCover" alt="product image">
+                            </a>
+                        </div>
+                        <div>
+                            <owl-carousel-o [options]="carouselOptions">
+                    
+                    
+                                @for (item of productDetail?.images; track $index) {
+                    
+                                    <ng-template carouselSlide>
+                                        <img [src]="item">
+                                      </ng-template>
+                                }
+                                  
+                            
+                              </owl-carousel-o>
+                        </div>
+                    </div>
+                
+                </div>
+                <!--// Product Details Left -->
+            </div>
+
+            <div class="col-lg-7 col-md-6">
+                <div class="product-details-view-content pt-60">
+                    <div class="product-info">
+                        <h2>{{productDetail?.title}}</h2>
+                        <span class="product-details-ref">Reference: {{productDetail?.sold}}</span>
+                        <div class="rating-box pt-20">
+                            <ul class="rating rating-with-review-item">
+                                <ul class="rating">
+                                    <li *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                                      <i class="fa" [ngClass]="getStarClass(i)"></i>
+                                    </li>
+                                  </ul>
+
+                            <li class="review-item"><a>Read Review</a></li>
+                                <li class="review-item"><a>Write Review</a></li>
+                            </ul>
+                        </div>
+                        <div class="price-box pt-20">
+                            <span class="new-price new-price-2">{{productDetail?.price}}</span>
+                        </div>
+                        <div class="product-desc">
+                            <p>
+                                <span>{{productDetail?.description}}</span>
+                            </p>
+                        </div>
+                      
+                        <div class="single-add-to-cart">
+                            <form action="#" class="cart-quantity">
+                                <div class="quantity">
+                                    <label>Quantity</label>
+                                    <div class="cart-plus-minus">
+                                        <input class="cart-plus-minus-box" value="1" type="text">
+                                        <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
+                                        <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
+                                    </div>
+                                </div>
+                                <button class="add-to-cart" type="submit">Add to cart</button>
+                            </form>
+                        </div>
+                        <div class="product-additional-info pt-25">
+                          
+                      
+                            <div class="product-social-sharing pt-25">
+                                <ul>
+                                    <li class="facebook"><a ><i class="fa fa-facebook"></i>Facebook</a></li>
+                                    <li class="twitter"><a><i class="fa fa-twitter"></i>Twitter</a></li>
+                                    <li class="google-plus"><a ><i class="fa fa-google-plus"></i>Google +</a></li>
+                                    <li class="instagram"><a ><i class="fa fa-instagram"></i>Instagram</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="block-reassurance">
+                            <ul>
+                                <li>
+                                    <div class="reassurance-item">
+                                        <div class="reassurance-icon">
+                                            <i class="fa fa-check-square-o"></i>
+                                        </div>
+                                        <p>Security policy (edit with Customer reassurance module)</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="reassurance-item">
+                                        <div class="reassurance-icon">
+                                            <i class="fa fa-truck"></i>
+                                        </div>
+                                        <p>Delivery policy (edit with Customer reassurance module)</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="reassurance-item">
+                                        <div class="reassurance-icon">
+                                            <i class="fa fa-exchange"></i>
+                                        </div>
+                                        <p> Return policy (edit with Customer reassurance module)</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>

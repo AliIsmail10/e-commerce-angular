@@ -100,4 +100,6 @@ toggleWishlist(productId: string, event: Event) {
 }
 
 
+
+
 }

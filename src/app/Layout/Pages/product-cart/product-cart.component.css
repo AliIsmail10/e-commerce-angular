@@ -38,11 +38,11 @@
   
   /* Heart icon colors */
   .wishlist-btn i.fa-heart {
-    color: #e74c3c; /* Red color for active wishlist */
+    color: #e74c3c; 
   }
   
   .wishlist-btn i.fa-heart-o {
-    color: #95a5a6; /* Gray color for inactive */
+    color: #95a5a6; 
   }
   
   /* Pulse animation when adding to wishlist */
