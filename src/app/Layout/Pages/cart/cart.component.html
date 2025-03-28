@@ -1,1 +1,181 @@
-<p>cart works!</p>
+<!-- <div class="Shopping-cart-area pt-60 pb-60">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div *ngIf="cartItems.length > 0; else emptyCart">
+          <div class="table-content table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="li-product-remove">Remove</th>
+                  <th class="li-product-thumbnail">Image</th>
+                  <th class="cart-product-name">Product</th>
+                  <th class="li-product-price">Unit Price</th>
+                  <th class="li-product-quantity">Quantity</th>
+                  <th class="li-product-subtotal">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of cartItems">
+                  <td class="li-product-remove">
+                    <a (click)="removeItem(item.product.id)"
+                      ><i class="fa fa-times"></i
+                    ></a>
+                  </td>
+                  <td class="li-product-thumbnail">
+                    <a href="#"
+                      ><img
+                        class="w-25"
+                        [src]="item.product.imageCover"
+                        alt="Product Image"
+                    /></a>
+                  </td>
+                  <td class="li-product-name">
+                    <a href="#">{{ item.product.title }}</a>
+                  </td>
+                  <td class="li-product-price">
+                    <span class="amount">${{ item.price }}</span>
+                  </td>
+                  <td class="quantity">
+                    <label>Quantity</label>
+                    <div class="cart-plus-minus">
+                      <input
+                        class="cart-plus-minus-box"
+                        [value]="item.count"
+                        type="number"
+                        (change)="updateQuantity(item.product.id, $event)"
+                      />
+                    </div>
+                  </td>
+                  <td class="product-subtotal">
+                    <span class="amount">${{ item.price * item.count }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="row">
+            <div class="col-md-5 ml-auto">
+              <div class="cart-page-total">
+                <h2>Cart Totals</h2>
+                <ul>
+                  <li>
+                    Subtotal <span>${{ total }}</span>
+                  </li>
+                  <li>
+                    Total <span>${{ total }}</span>
+                  </li>
+                </ul>
+                <a href="#">Proceed to Checkout</a>
+                <button class="btn btn-danger" (click)="clearCart()">
+                  Clear Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #emptyCart>
+          <h3 class="text-center">Your cart is empty</h3>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="Shopping-cart-area pt-60 pb-60">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div *ngIf="cartItems().length > 0; else emptyCart">
+          <div class="table-content table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="li-product-remove">Remove</th>
+                  <th class="li-product-thumbnail">Image</th>
+                  <th class="cart-product-name">Product</th>
+                  <th class="li-product-price">Unit Price</th>
+                  <th class="li-product-quantity">Quantity</th>
+                  <th class="li-product-subtotal">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of cartItems()">
+                  <td class="li-product-remove">
+                    <a (click)="removeItem(item.product.id)">
+                      <i class="fa fa-times"></i>
+                    </a>
+                  </td>
+                  <td class="li-product-thumbnail">
+                    <a href="#">
+                      <img
+                        class="w-25"
+                        [src]="item.product.imageCover"
+                        alt="Product Image"
+                      />
+                    </a>
+                  </td>
+                  <td class="li-product-name">
+                    <a href="#">{{ item.product.title }}</a>
+                  </td>
+                  <td class="li-product-price">
+                    <span class="amount">${{ item.price }}</span>
+                  </td>
+                  <td class="quantity">
+                    <label>Quantity</label>
+                    <div class="cart-plus-minus">
+                      <input
+                        class="cart-plus-minus-box"
+                        [value]="item.count"
+                        type="number"
+                        (change)="updateQuantity(item.product.id, $event)"
+                      />
+                    </div>
+                  </td>
+                  <td class="product-subtotal">
+                    <span class="amount">${{ item.price * item.count }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="row">
+            <div class="col-md-5 ml-auto">
+              <div class="cart-page-total">
+                <h2>Cart Totals</h2>
+                <ul>
+                  <li>
+                    Subtotal <span>${{ total() }}</span>
+                  </li>
+                  <li>
+                    Total <span>${{ total() }}</span>
+                  </li>
+                </ul>
+
+                <a
+                  href="checkout.html"
+                  class="btn btn-primary w-75 h-25 mx-2 my-2"
+                  >Proceed to Checkout</a
+                >
+
+                <button
+                  class="btn btn-danger w-75 h-25 mx-2 my-2"
+                  (click)="clearCart()"
+                >
+                  Clear Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #emptyCart>
+          <h3 class="text-center">Your cart is empty</h3>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

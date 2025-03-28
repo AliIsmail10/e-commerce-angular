@@ -25,7 +25,7 @@
         </div>
         <div class="add-actions">
             <ul class="add-actions-link d-flex justify-content-between align-items-center">
-                <li class="add-cart active"><a href="/shopping-cart">Add to cart</a></li>
+                <li class="add-cart active"><a (click)="addToCart(product._id)">Add to cart</a></li>
                 <li><a [routerLink]="['/productDetails', product._id]" title="quick view" class="quick-view-btn" ><i class="fa fa-eye"></i></a></li>
                 <button class="wishlist-btn" (click)="toggleWishlist(product.id, $event)" [attr.data-product-id]="product.id">
                     <i class="fa" [ngClass]="{'fa-heart': wishlistProductIds.includes(product.id), 'fa-heart-o': !wishlistProductIds.includes(product.id)}"></i>
