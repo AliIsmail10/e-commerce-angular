@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { SharedService } from '../../../Shared/shared/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { WishlistService } from '../../../Shared/Services/wishlist/wishlist.service';
+import { AuthService } from '../../../Shared/Services/auth/auth.service';
 
 @Component({
   selector: 'app-product-cart',
@@ -14,35 +15,39 @@ import { WishlistService } from '../../../Shared/Services/wishlist/wishlist.serv
 export class ProductCartComponent implements OnInit {
   @Input() product: any;
   wishlistProductIds: string[] = [];
+  isLoggedIn = false;
   
   constructor(
     public _WishlistService: WishlistService,
     public sharedService: SharedService,
     private renderer: Renderer2,
     private toastr: ToastrService,
-    private el: ElementRef
-  ) {}
+    private el: ElementRef,
+    private _AuthService:AuthService
+  ) {
 
-  ngOnInit(): void {
-    this.fetchWishlist();
+    if (this._AuthService.isLoggedIn()) {
+      this.fetchWishlist();
+    }
   }
 
+
+  ngOnInit(): void {
+    this._AuthService.isLoggedIn$.subscribe(loggedIn => {
+      this.isLoggedIn = loggedIn;
+      if (loggedIn) {
+        this.fetchWishlist();
+      } else {
+        this.wishlistProductIds = [];
+      }
+    });
+  }
   ngAfterViewInit(): void {
     this.updateWishlistIcons();
   }
 
-  fetchWishlist() {
-    this._WishlistService.GetLoggedUserWishlist().subscribe({
-      next: (wishList) => {
-        this.wishlistProductIds = wishList.data.map((item: any) => item.id);
-        this.updateWishlistIcons(); // Update icons after data loads
-      },
-      error: (error) => {
-        console.error('Error fetching wishlist: ', error);
-      },
-    });
-  }
 
+  
   private updateWishlistIcons() {
     setTimeout(() => {
       const wishlistButtons = this.el.nativeElement.querySelectorAll('.wishlist-btn');
@@ -63,18 +68,29 @@ export class ProductCartComponent implements OnInit {
     this.renderer.setStyle(icon, 'color', isInWishlist ? 'red' : 'gray');
 }
 
+fetchWishlist() {
+  this._WishlistService.GetLoggedUserWishlist().subscribe({
+    next: (wishList) => {
+      this.wishlistProductIds = wishList.data?.map((item: any) => item.id) || [];
+      this.updateWishlistIcons();
+    },
+    error: (error) => {
+      console.error('Error fetching wishlist:', error);
+    }
+  });
+}
+
 toggleWishlist(productId: string, event: Event) {
   event.stopPropagation();
-  if (!productId) return;
   
+  if (!this.isLoggedIn) {
+    this.toastr.error('Please login to manage your wishlist');
+    return;
+  }
+
   const button = event.currentTarget as HTMLElement;
   const iconElement = button.querySelector('i');
   if (!iconElement) return;
-
-  if (!this.wishlistProductIds.includes(productId)) {
-    this.renderer.addClass(button, 'added');
-    setTimeout(() => this.renderer.removeClass(button, 'added'), 500);
-  }
 
   const isInWishlist = this.wishlistProductIds.includes(productId);
   
@@ -83,7 +99,7 @@ toggleWishlist(productId: string, event: Event) {
       next: () => {
         this.wishlistProductIds = this.wishlistProductIds.filter(id => id !== productId);
         this.updateIconStyle(iconElement, false);
-        this.toastr.error('Removed from wishlist');
+        this.toastr.success('Removed from wishlist');
       },
       error: (err) => this.toastr.error('Failed to remove from wishlist')
     });
@@ -98,8 +114,6 @@ toggleWishlist(productId: string, event: Event) {
     });
   }
 }
-
-
 
 
 }

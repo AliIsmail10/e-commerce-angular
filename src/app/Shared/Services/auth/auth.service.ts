@@ -1,23 +1,44 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Enviroment } from '../../../base/enviroment';
 import { LoginData, UserData } from '../../Interfaces/user-data';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
-
+import { toObservable } from '@angular/core/rxjs-interop';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   userData: BehaviorSubject<any> = new BehaviorSubject(null);
+  private _isLoggedIn = signal<boolean>(false);
+
+  isLoggedIn = this._isLoggedIn.asReadonly();
+
+  isLoggedIn$ = toObservable(this._isLoggedIn);
+
   constructor(private _HttpClient: HttpClient, private _Router: Router) {
-    if (typeof localStorage !== 'undefined') {
-      if (localStorage.getItem('userToken') !== null) {
-        this.deCodeUserData();
-        this._Router.navigate([localStorage.getItem('currentPage')]);
+    this.checkToken();
+  }
+
+  private checkToken() {
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      try {
+        const decodedUser = jwtDecode(token);
+        this.userData.next(decodedUser);
+        this._isLoggedIn.set(true);
+      } catch (error) {
+        this.logout();
       }
     }
+  }
+  logout() {
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('currentPage');
+    this.userData.next(null);
+    this._isLoggedIn.set(false);
+    this._Router.navigate(['/login']);
   }
 
   sentRegister(userData: UserData): Observable<any> {
@@ -34,23 +55,17 @@ export class AuthService {
     );
   }
 
-  logout() {
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('currentPage');
-    this.userData.next(null);
-    window.location.reload();
-  }
 
-  deCodeUserData() {
-    const token = localStorage.getItem('userToken');
-    //  this.userData.next(jwtDecode(JSON.stringify(token)));
-
-    if (token) {
-      const decodedUser: any = jwtDecode(token);
+  deCodeUserData(token: string) {
+    try {
+      const decodedUser = jwtDecode(token);
       this.userData.next(decodedUser);
-      console.log(this.userData);
+      this._isLoggedIn.set(true);
+    } catch (error) {
+      this.logout();
     }
   }
+
 
   sendEmailApi(email: string): Observable<any> {
     return this._HttpClient.post(
