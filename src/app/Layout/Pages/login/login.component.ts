@@ -40,6 +40,8 @@ onSubmit() {
     })
     .subscribe({
       next: (response) => {
+
+        console.log('response :', response);
         localStorage.setItem('userToken', response.token);
         this.authService.deCodeUserData(response.token); 
         this.router.navigate(['/home']);
