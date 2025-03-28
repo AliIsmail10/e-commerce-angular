@@ -1,10 +1,8 @@
-<!-- product-cart.component.html -->
 <div class="single-product-wrap">
     <div class="product-image">
         <a [routerLink]="['/products', product?.slug]">
             <img [src]="product?.imageCover" [alt]="product?.title">
         </a>
-        <span class="sticker">New</span>
     </div>
     <div class="product_desc">
         <div class="product_desc_info">
@@ -26,10 +24,13 @@
             </div>
         </div>
         <div class="add-actions">
-            <ul class="add-actions-link">
+            <ul class="add-actions-link d-flex justify-content-between align-items-center">
                 <li class="add-cart active"><a href="/shopping-cart">Add to cart</a></li>
                 <li><a href="#" title="quick view" class="quick-view-btn"><i class="fa fa-eye"></i></a></li>
-                <li><a class="links-details" href="/wishlist"><i class="fa fa-heart-o"></i></a></li>
+                <button class="wishlist-btn" (click)="toggleWishlist(product.id, $event)" [attr.data-product-id]="product.id">
+                    <i class="fa" [ngClass]="{'fa-heart': wishlistProductIds.includes(product.id), 'fa-heart-o': !wishlistProductIds.includes(product.id)}"></i>
+                  </button>
+
             </ul>
         </div>
     </div>

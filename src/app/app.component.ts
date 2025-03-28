@@ -6,15 +6,18 @@ import { ThirdNavBarComponent } from "./Layout/Additions/third-nav-bar/third-nav
 import jQuery from 'jquery';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { FooterComponent } from "./Layout/Additions/footer/footer.component"; 
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, SecNavBarComponent, ThirdNavBarComponent, CarouselModule, FooterComponent],
+  imports: [RouterOutlet, NavbarComponent, SecNavBarComponent, ThirdNavBarComponent, CarouselModule, FooterComponent ,NgxSpinnerModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent implements AfterViewInit {
   title = 'E-commerceAngular';
+  constructor(private spinner: NgxSpinnerService) {}
+
   ngAfterViewInit() {
     // Dropdown toggles
     jQuery('.ht-setting-trigger').on('click', function() {

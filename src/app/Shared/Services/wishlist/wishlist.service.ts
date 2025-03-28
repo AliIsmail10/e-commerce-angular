@@ -19,7 +19,6 @@ export class WishlistService {
     }
   }
 
-  // Load the wishlist count initially
   private loadWishlistCount() {
     this.GetLoggedUserWishlist().subscribe({
       next: (wishList) => {
