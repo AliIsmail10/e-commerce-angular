@@ -21,6 +21,11 @@ export const routes: Routes = [
       ),
   },
   {
+    path:'wishlist',
+    loadComponent: () =>import('./Layout/Pages/wish-list/wish-list.component').then((m)=>m.WishListComponent),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'about',
     loadComponent: () =>
       import('./Layout/Pages/about/about.component').then(
