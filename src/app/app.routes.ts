@@ -40,11 +40,17 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'cart',
+    path: 'allorders',
     loadComponent: () =>
       import('./Layout/Pages/cart/cart.component').then((m) => m.CartComponent),
     canActivate: [AuthGuard],
     data: { role: 'user' },
+  },
+  {
+    path: 'checkout/:Cid',
+    canActivate: [AuthGuard],
+    loadComponent: () =>import('./Layout/Additions/checkout/checkout.component').then(
+      (m) => m.CheckoutComponent)
   },
   {
     path: 'categories',

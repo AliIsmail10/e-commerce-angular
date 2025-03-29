@@ -32,3 +32,27 @@ export interface Product {
     slug: string;
     category: string;
   }
+
+  export interface Cart {
+    status: string;
+    numOfCartItems: number;
+    cartId: string;
+    data: Data;
+  }
+  
+interface Data {
+  _id: string;
+  cartOwner: string;
+  products: Product2[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  totalCartPrice: number;
+}
+
+interface Product2 {
+  count: number;
+  _id: string;
+  product: Product;
+  price: number;
+}

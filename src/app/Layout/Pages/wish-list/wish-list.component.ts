@@ -29,7 +29,6 @@ export class WishListComponent implements OnInit {
     this._CartService.AddProducttoCart(pId).subscribe({
       next: (res: any) => {
         this.toastr.success(res.message);
-        this._CartService.cartItem.next(res.numOfCartItems);
       },
       error: (error) => {
         console.error('Error adding product to cart:', error);

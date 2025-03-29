@@ -1,52 +1,42 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, OnDestroy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { SharedService } from '../../../Shared/shared/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { WishlistService } from '../../../Shared/Services/wishlist/wishlist.service';
-<<<<<<< HEAD
 import { AuthService } from '../../../Shared/Services/auth/auth.service';
-=======
 import { CartService } from '../../../Shared/Services/cart/cart.service';
->>>>>>> 8ca80bbf027dd5e3762ce111d147be66305ca774
+import { Subscription } from 'rxjs';
+
+interface WishlistItem {
+  id: string;
+  // Add other properties as needed
+}
 
 @Component({
   selector: 'app-product-cart',
+  standalone: true,
   imports: [RouterLink, CommonModule],
   templateUrl: './product-cart.component.html',
-  styleUrl: './product-cart.component.css',
+  styleUrls: ['./product-cart.component.css']
 })
-export class ProductCartComponent implements OnInit {
+export class ProductCartComponent implements OnInit, OnDestroy {
   @Input() product: any;
   wishlistProductIds: string[] = [];
-<<<<<<< HEAD
   isLoggedIn = false;
-  
-=======
+  private authSubscription!: Subscription;
 
->>>>>>> 8ca80bbf027dd5e3762ce111d147be66305ca774
   constructor(
-    public _WishlistService: WishlistService,
-    public sharedService: SharedService,
+    private wishlistService: WishlistService,
     private renderer: Renderer2,
     private toastr: ToastrService,
     private el: ElementRef,
-<<<<<<< HEAD
-    private _AuthService:AuthService
-  ) {
-=======
-    private _CartService: CartService
+    private authService: AuthService,
+    private router: Router,
+    private cartService: CartService
   ) {}
->>>>>>> 8ca80bbf027dd5e3762ce111d147be66305ca774
-
-    if (this._AuthService.isLoggedIn()) {
-      this.fetchWishlist();
-    }
-  }
-
 
   ngOnInit(): void {
-    this._AuthService.isLoggedIn$.subscribe(loggedIn => {
+    this.authSubscription = this.authService.isLoggedIn$.subscribe(loggedIn => {
       this.isLoggedIn = loggedIn;
       if (loggedIn) {
         this.fetchWishlist();
@@ -55,16 +45,20 @@ export class ProductCartComponent implements OnInit {
       }
     });
   }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }
+
   ngAfterViewInit(): void {
     this.updateWishlistIcons();
   }
 
-
-  
-  private updateWishlistIcons() {
+  private updateWishlistIcons(): void {
     setTimeout(() => {
-      const wishlistButtons =
-        this.el.nativeElement.querySelectorAll('.wishlist-btn');
+      const wishlistButtons = this.el.nativeElement.querySelectorAll('.wishlist-btn');
       wishlistButtons.forEach((button: HTMLElement) => {
         const productId = button.getAttribute('data-product-id');
         const icon = button.querySelector('i');
@@ -76,104 +70,88 @@ export class ProductCartComponent implements OnInit {
     }, 0);
   }
 
-  private updateIconStyle(icon: Element, isInWishlist: boolean) {
+  private updateIconStyle(icon: Element, isInWishlist: boolean): void {
     this.renderer.removeClass(icon, isInWishlist ? 'fa-heart-o' : 'fa-heart');
     this.renderer.addClass(icon, isInWishlist ? 'fa-heart' : 'fa-heart-o');
     this.renderer.setStyle(icon, 'color', isInWishlist ? 'red' : 'gray');
   }
 
-  toggleWishlist(productId: string, event: Event) {
-    event.stopPropagation();
+  addToCart(productId: string): void {
     if (!productId) return;
 
-<<<<<<< HEAD
-fetchWishlist() {
-  this._WishlistService.GetLoggedUserWishlist().subscribe({
-    next: (wishList) => {
-      this.wishlistProductIds = wishList.data?.map((item: any) => item.id) || [];
-      this.updateWishlistIcons();
-    },
-    error: (error) => {
-      console.error('Error fetching wishlist:', error);
-    }
-  });
-}
-
-toggleWishlist(productId: string, event: Event) {
-  event.stopPropagation();
-  
-  if (!this.isLoggedIn) {
-    this.toastr.error('Please login to manage your wishlist');
-    return;
+    this.cartService.AddProducttoCart(productId).subscribe({
+      next: (response: any) => {
+        this.toastr.success('Product added to cart successfully!');
+      },
+      error: (err: any) => {
+        this.toastr.error('Failed to add product to cart');
+        console.error('Add to cart error:', err);
+      }
+    });
   }
 
-  const button = event.currentTarget as HTMLElement;
-  const iconElement = button.querySelector('i');
-  if (!iconElement) return;
+  fetchWishlist(): void {
+    this.wishlistService.GetLoggedUserWishlist().subscribe({
+      next: (wishList: { data?: WishlistItem[] }) => {
+        this.wishlistProductIds = wishList.data?.map(item => item.id) || [];
+        this.updateWishlistIcons();
+      },
+      error: (error: any) => {
+        console.error('Error fetching wishlist:', error);
+      }
+    });
+  }
 
-  const isInWishlist = this.wishlistProductIds.includes(productId);
-  
-  if (isInWishlist) {
-    this._WishlistService.RemoveProductFromWishlist(productId).subscribe({
-      next: () => {
-        this.wishlistProductIds = this.wishlistProductIds.filter(id => id !== productId);
-        this.updateIconStyle(iconElement, false);
-        this.toastr.success('Removed from wishlist');
-=======
+  toggleWishlist(productId: string, event: Event): void {
+    event.stopPropagation();
+    
+    if (!this.isLoggedIn) {
+      this.toastr.error('Please login to manage your wishlist');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     const button = event.currentTarget as HTMLElement;
     const iconElement = button.querySelector('i');
     if (!iconElement) return;
 
-    if (!this.wishlistProductIds.includes(productId)) {
+    const isInWishlist = this.wishlistProductIds.includes(productId);
+    
+    if (!isInWishlist) {
       this.renderer.addClass(button, 'added');
       setTimeout(() => this.renderer.removeClass(button, 'added'), 500);
     }
 
-    const isInWishlist = this.wishlistProductIds.includes(productId);
-
     if (isInWishlist) {
-      this._WishlistService.RemoveProductFromWishlist(productId).subscribe({
-        next: () => {
-          this.wishlistProductIds = this.wishlistProductIds.filter(
-            (id) => id !== productId
-          );
-          this.updateIconStyle(iconElement, false);
-          this.toastr.error('Removed from wishlist');
-        },
-        error: (err) => this.toastr.error('Failed to remove from wishlist'),
-      });
+      this.removeFromWishlist(productId, iconElement);
     } else {
-      this._WishlistService.AddProductToWishlist(productId).subscribe({
-        next: () => {
-          this.wishlistProductIds = [...this.wishlistProductIds, productId];
-          this.updateIconStyle(iconElement, true);
-          this.toastr.success('Added to wishlist');
-        },
-        error: (err) => this.toastr.error('Failed to add to wishlist'),
-      });
+      this.addToWishlist(productId, iconElement);
     }
   }
 
-  addToCart(productId: string) {
-    if (!productId) return;
-
-    this._CartService.AddProducttoCart(productId).subscribe({
-      next: (response) => {
-        this.toastr.success('Product added to cart successfully!');
-
-        this._CartService.cartItem.next(this._CartService.cartItem.value + 1);
->>>>>>> 8ca80bbf027dd5e3762ce111d147be66305ca774
+  private addToWishlist(productId: string, iconElement: Element): void {
+    this.wishlistService.AddProductToWishlist(productId).subscribe({
+      next: () => {
+        this.wishlistProductIds = [...this.wishlistProductIds, productId];
+        this.updateIconStyle(iconElement, true);
+        this.toastr.success('Added to wishlist');
       },
-      error: (err) => {
-        this.toastr.error('Failed to add product to cart');
-        console.error('Add to cart error:', err);
+      error: (err: any) => {
+        this.toastr.error('Failed to add to wishlist');
+      }
+    });
+  }
+
+  private removeFromWishlist(productId: string, iconElement: Element): void {
+    this.wishlistService.RemoveProductFromWishlist(productId).subscribe({
+      next: () => {
+        this.wishlistProductIds = this.wishlistProductIds.filter(id => id !== productId);
+        this.updateIconStyle(iconElement, false);
+        this.toastr.success('Removed from wishlist');
       },
+      error: (err: any) => {
+        this.toastr.error('Failed to remove from wishlist');
+      }
     });
   }
 }
-<<<<<<< HEAD
-
-
-}
-=======
->>>>>>> 8ca80bbf027dd5e3762ce111d147be66305ca774
