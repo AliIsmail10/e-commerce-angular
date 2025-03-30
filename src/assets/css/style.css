@@ -3561,6 +3561,7 @@ li.right-menu .cat-mega-menu-2 > li {
 .table-content table td.li-product-add-cart a:hover {
 	background: #fed700 none repeat scroll 0 0;
 	color: #fff;
+	cursor:pointer;
 }
 /*----------------------------------------*/
 /* 6.4 Li's Checkout Page

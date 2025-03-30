@@ -18,14 +18,14 @@
                     <div class="product-details-images slider-navigation-1">
                         <div class="lg-image">
                             <a class="popup-img venobox vbox-item" data-gall="myGallery">
-                                <img [src]="productDetail?.imageCover" alt="product image">
+                                <img [src]="productDetail.imageCover" alt="product image">
                             </a>
                         </div>
                         <div>
                             <owl-carousel-o [options]="carouselOptions">
                     
                     
-                                @for (item of productDetail?.images; track $index) {
+                                @for (item of productDetail.images; track $index) {
                     
                                     <ng-template carouselSlide>
                                         <img [src]="item">
@@ -38,14 +38,13 @@
                     </div>
                 
                 </div>
-                <!--// Product Details Left -->
             </div>
 
             <div class="col-lg-7 col-md-6">
                 <div class="product-details-view-content pt-60">
                     <div class="product-info">
-                        <h2>{{productDetail?.title}}</h2>
-                        <span class="product-details-ref">Reference: {{productDetail?.sold}}</span>
+                        <h2>{{productDetail.title}}</h2>
+                        <span class="product-details-ref">Reference: {{productDetail.sold}}</span>
                         <div class="rating-box pt-20">
                             <ul class="rating rating-with-review-item">
                                 <ul class="rating">
@@ -59,38 +58,57 @@
                             </ul>
                         </div>
                         <div class="price-box pt-20">
-                            <span class="new-price new-price-2">{{productDetail?.price}}</span>
+                            <span class="new-price new-price-2">{{productDetail.price}}</span>
                         </div>
                         <div class="product-desc">
                             <p>
-                                <span>{{productDetail?.description}}</span>
+                                <span>{{productDetail.description}}</span>
                             </p>
                         </div>
                       
                         <div class="single-add-to-cart">
-                            <form action="#" class="cart-quantity">
-                                <div class="quantity">
-                                    <label>Quantity</label>
-                                    <div class="cart-plus-minus">
-                                        <input class="cart-plus-minus-box" value="1" type="text">
-                                        <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
-                                        <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
-                                    </div>
-                                </div>
-                                <button class="add-to-cart" type="submit">Add to cart</button>
-                            </form>
-                        </div>
+    <div class="cart-quantity">
+        <label>Quantity</label>
+        <div class="cart-plus-minus">
+            <input class="cart-plus-minus-box" [value]="quantity" type="text" readonly>
+            <div class="dec qtybutton" (click)="decrementQuantity()">
+                <i class="fa fa-angle-down"></i>
+            </div>
+            <div class="inc qtybutton" (click)="incrementQuantity()">
+                <i class="fa fa-angle-up"></i>
+            </div>
+        </div>
+        <button class="add-to-cart" (click)="addProductToCard(productDetail._id)">Add to cart</button>
+    </div>
+</div>
                         <div class="product-additional-info pt-25">
                           
                       
-                            <div class="product-social-sharing pt-25">
-                                <ul>
-                                    <li class="facebook"><a ><i class="fa fa-facebook"></i>Facebook</a></li>
-                                    <li class="twitter"><a><i class="fa fa-twitter"></i>Twitter</a></li>
-                                    <li class="google-plus"><a ><i class="fa fa-google-plus"></i>Google +</a></li>
-                                    <li class="instagram"><a ><i class="fa fa-instagram"></i>Instagram</a></li>
+                            <div class="text-left pt-25">
+                                <ul class="social-icons">
+                                    <li>
+                                        <a class="facebook">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="twitter">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="google-plus">
+                                            <i class="fa fa-google-plus"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="instagram">
+                                            <i class="fa fa-instagram"></i>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
+                            
                         </div>
                         <div class="block-reassurance">
                             <ul>

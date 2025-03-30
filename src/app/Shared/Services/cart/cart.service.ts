@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject, tap } from 'rxjs';
 import { Enviroment } from '../../../base/enviroment';
 import { AuthService } from '../auth/auth.service';
 
@@ -37,9 +37,6 @@ notifyCartUpdates() {
     });
   }
 
-
-
- // Example in CartService
 AddProducttoCart(pId: string): Observable<any> {
   return this._HttpClient.post(`${Enviroment.baseUrl}/api/v1/cart`, { "productId": pId }).pipe(
     tap((response: any) => {
@@ -48,11 +45,15 @@ AddProducttoCart(pId: string): Observable<any> {
     })
   );
 }
+
+
   UpdateCartProductQuantity(pId: string, Pcount: number): Observable<any> {
     return this._HttpClient.put(`${Enviroment.baseUrl}/api/v1/cart/${pId}`, { "count": Pcount });
   }
 
   GetLoggedUserCart(): Observable<any> {
+    const token = localStorage.getItem('userToken');
+    if (!token) return EMPTY;
     return this._HttpClient.get(`${Enviroment.baseUrl}/api/v1/cart`);
   }
 
@@ -60,6 +61,8 @@ AddProducttoCart(pId: string): Observable<any> {
     return this._HttpClient.delete(`${Enviroment.baseUrl}/api/v1/cart/${pId}`).pipe(
       tap((response: any) => {
         this.cartCountSubject.next(response.numOfCartItems);
+      this.notifyCartUpdates();
+
       })
     );
   }

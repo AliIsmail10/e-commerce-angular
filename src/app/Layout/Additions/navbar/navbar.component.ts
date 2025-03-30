@@ -11,8 +11,13 @@ import { AuthService } from '../../../Shared/Services/auth/auth.service';
 })
 export class NavbarComponent implements OnInit {
   userName: string = '';
+  islogging: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+    this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
+      this.islogging = isLoggedIn;
+    });
+  }
 
   ngOnInit(): void {
     this.authService.userData.subscribe((user) => {

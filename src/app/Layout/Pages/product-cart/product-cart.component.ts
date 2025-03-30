@@ -85,7 +85,6 @@ export class ProductCartComponent implements OnInit, OnDestroy {
       },
       error: (err: any) => {
         this.toastr.error('Failed to add product to cart');
-        console.error('Add to cart error:', err);
       }
     });
   }

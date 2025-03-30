@@ -58,10 +58,7 @@ export class SecNavBarComponent implements AfterViewInit, OnInit {
           );
           this.total.set(newTotal);
         }
-      },
-      error: (err) => {
-        console.error('Error fetching cart:', err);
-      },
+      }
     });
   }
 

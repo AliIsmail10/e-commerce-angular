@@ -11,58 +11,48 @@
                                     <th class="li-product-thumbnail" style="width: 15%;">images</th>
                                     <th class="cart-product-name">Product</th>
                                     <th class="li-product-price">Unit Price</th>
-                                    <th class="li-product-add-cart">add to
-                                        cart</th>
+                                    <th class="li-product-add-cart">add to cart</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @if (isLoading()) {
                                 <tr>
                                     <td colspan="5" class="text-center py-5">
-                                        <div class="spinner-border text-warning"
-                                            role="status">
-                                            <span
-                                                class="visually-hidden">Loading...</span>
+                                        <div class="spinner-border text-warning" role="status">
+                                            <span class="visually-hidden">Loading...</span>
                                         </div>
-                                        <p class="mt-2">Loading your
-                                            wishlist...</p>
+                                        <p class="mt-2">Loading your wishlist...</p>
                                     </td>
                                 </tr>
                                 }@else if (wishlistItems().length === 0) {
-
                                 <tr>
                                     <td colspan="5" class="text-center py-5">
                                         No items in your wishlist
                                         <br />
-                                        <a routerLink="/products"
-                                            class="btn btn-outline-primary mt-3">Browse
-                                            Products</a>
+                                        <a routerLink="/products" class="btn btn-outline-primary mt-3">Browse Products</a>
                                     </td>
                                 </tr>
                                 }
                                 @else {
-
-                                @for (product of wishlistItems(); track $index)
-                                {
+                                @for (product of wishlistItems(); track $index) {
                                 <tr>
-                                    <td class="li-product-remove"><a
-                                            (click)="removeFromWishList(product._id)"><i
-                                                class="fa fa-times"></i></a></td>
-                                    <td class="li-product-thumbnail"><a><img
-                                                class="w-100 img-fluid"
-                                                [src]="product.imageCover"
-                                                alt></a></td>
-                                    <td
-                                        class="li-product-name"><a>{{product.title}}</a></td>
-                                    <td class="li-product-price"><span
-                                            class="amount">{{product.price |
-                                            currency}}</span></td>
-                                    <td class="li-product-add-cart"><a
-                                            (click)="addProductToCard(product._id)">add
-                                            to cart</a></td>
+                                    <td class="li-product-remove">
+                                        <a (click)="showDeleteConfirmation = true; productToDelete = product._id">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </td>
+                                    <td class="li-product-thumbnail">
+                                        <a><img class="w-100 img-fluid" [src]="product.imageCover" alt></a>
+                                    </td>
+                                    <td class="li-product-name"><a>{{product.title}}</a></td>
+                                    <td class="li-product-price">
+                                        <span class="amount">{{product.price | currency}}</span>
+                                    </td>
+                                    <td class="li-product-add-cart ">
+                                        <a (click)="addProductToCard(product._id)">add to cart</a>
+                                    </td>
                                 </tr>
                                 }
-
                                 }
                             </tbody>
                         </table>
@@ -72,3 +62,24 @@
         </div>
     </div>
 </div>
+
+@if (showDeleteConfirmation) {
+<div class="modal-backdrop fade show"></div>
+<div class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Remove from Wishlist</h5>
+                <button type="button" class="btn-close" (click)="showDeleteConfirmation = false"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to remove this item from your wishlist?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="showDeleteConfirmation = false">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="confirmRemove()">Remove</button>
+            </div>
+        </div>
+    </div>
+</div>
+}

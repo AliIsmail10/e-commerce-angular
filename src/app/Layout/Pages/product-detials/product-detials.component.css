@@ -1,0 +1,37 @@
+.social-icons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 10px;
+    /* justify-content: center; */
+}
+
+.social-icons li {
+    display: inline-block;
+}
+
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 18px;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+/* Social Media Colors */
+.facebook { background: #3b5998; }
+.twitter { background: #1da1f2; }
+.google-plus { background: #db4a39; }
+.instagram { background: #e1306c; }
+
+/* Hover Effects */
+.social-icons a:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}

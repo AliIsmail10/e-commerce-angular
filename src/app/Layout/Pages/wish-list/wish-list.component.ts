@@ -16,6 +16,8 @@ export class WishListComponent implements OnInit {
 
   wishlistItems: WritableSignal<Product[]> = signal([]);
   isLoading = signal<boolean>(true);
+  showDeleteConfirmation = false;
+  productToDelete: string | null = null;
 
   constructor(private _WishlistService: WishlistService, 
               private _CartService: CartService, 
@@ -52,16 +54,22 @@ export class WishListComponent implements OnInit {
     });
   }
 
-  removeFromWishList(pId: string) {
-    this._WishlistService.RemoveProductFromWishlist(pId).subscribe({
-      next: (res: any) => {
-        this.wishlistItems.update(items => items.filter(item => item._id !== pId));
-        this.toastr.error(res.message);
-      },
-      error: (error) => {
-        console.error('Error removing product from wishlist: ', error);
-        this.toastr.error('Failed to remove product from wishlist');
-      }
-    });
+  confirmRemove() {
+    this.showDeleteConfirmation = true;
+    if (this.productToDelete) {
+      this._WishlistService.RemoveProductFromWishlist(this.productToDelete).subscribe({
+        next: () => {
+          this.toastr.success('Product removed from wishlist');
+          this.loadWishlist(); 
+        },
+        error: (err) => {
+          this.toastr.error('Failed to remove product from wishlist');
+        }
+      });
+    }
+    this.showDeleteConfirmation = false;
+    this.productToDelete = null;
   }
+
+  
 }
