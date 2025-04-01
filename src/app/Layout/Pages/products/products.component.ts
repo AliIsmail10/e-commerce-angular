@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
+import { ActivatedRoute, Router } from '@angular/router'; // Import ActivatedRoute
 import { BrandsService } from '../../../Shared/Services/brands/brands.service';
 import { CategoryService } from '../../../Shared/Services/category/category.service';
 import { ProductService } from '../../../Shared/Services/product/product.service';
@@ -23,21 +23,23 @@ export class ProductsComponent implements OnInit {
   visibleBrands: any[] = [];
   visibleCategories: any[] = [];
   selectedCategoryId: string = '';
-  selectedBrandId: string = ''; // Added for single brand selection
+  selectedBrandId: string = ''; // Added for brand selection
 
   constructor(
     private productService: ProductService,
     private brandsService: BrandsService,
     private categoryService: CategoryService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute, // Keep ActivatedRoute for accessing route params
+    private router: Router // Correctly inject Router for navigating
   ) {}
 
   ngOnInit(): void {
+    // Check for category or brand in query params and fetch filtered products
     if (
       !this.route.snapshot.queryParamMap.has('category[in]') &&
       !this.route.snapshot.queryParamMap.has('brand')
     ) {
-      this.fetchProducts();
+      this.fetchProducts(); // Fetch all products if no filter
     }
     this.fetchBrands();
     this.fetchCategories();
@@ -88,10 +90,15 @@ export class ProductsComponent implements OnInit {
 
   onCategoryChange(event: any, categoryId: string): void {
     if (event.target.checked) {
-      this.selectedCategoryId = categoryId;
+      this.selectedCategoryId = categoryId; // Set single category ID
     } else {
-      this.selectedCategoryId = '';
+      this.selectedCategoryId = ''; // Clear category if unchecked
     }
+
+    // Update query param for category
+    this.updateQueryParams();
+
+    // Fetch filtered products based on selected category
     this.getProductsByCategory();
   }
 
@@ -101,7 +108,12 @@ export class ProductsComponent implements OnInit {
     } else {
       this.selectedBrandId = ''; // Clear the selected brand ID if unchecked
     }
-    this.getProductsByBrand(); // Fetch products by the selected brand
+
+    // Update query param for brand
+    this.updateQueryParams();
+
+    // Fetch products based on selected brand
+    this.getProductsByBrand();
   }
 
   updateVisibleCategories(): void {
@@ -120,29 +132,62 @@ export class ProductsComponent implements OnInit {
     }
   }
 
-  getProductsByCategory(): void {
+  updateQueryParams(): void {
+    let queryParams: any = {};
+
+    // Add selected category and brand to query params
     if (this.selectedCategoryId) {
-      this.productService
-        .getProductsByCategory(this.selectedCategoryId)
-        .subscribe({
-          next: (response) => {
-            this.products = response.data;
-          },
-          error: (error) => {
-            console.error('Error fetching products by category:', error);
-          },
-        });
+      queryParams['category[in]'] = this.selectedCategoryId;
+    }
+    if (this.selectedBrandId) {
+      queryParams['brand'] = this.selectedBrandId;
+    }
+
+    // Update the URL with the new query params
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+      queryParamsHandling: 'merge', // Keep existing query params and merge new ones
+    });
+  }
+
+  getProductsByCategory(): void {
+    const categoryId = this.route.snapshot.queryParamMap.get('category[in]');
+    const decodedCategoryId = categoryId
+      ? decodeURIComponent(categoryId)
+      : this.selectedCategoryId; // Use selected category if available
+
+    if (decodedCategoryId) {
+      this.loading = true;
+      this.productService.getProductsByCategory(decodedCategoryId).subscribe({
+        next: (response) => {
+          this.products = response.data;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching products by category:', error);
+          this.loading = false;
+        },
+      });
     }
   }
 
   getProductsByBrand(): void {
-    if (this.selectedBrandId) {
-      this.productService.getProductsByBrand(this.selectedBrandId).subscribe({
+    const brandId = this.route.snapshot.queryParamMap.get('brand');
+    const decodedBrandId = brandId
+      ? decodeURIComponent(brandId)
+      : this.selectedBrandId; // Use selected brand if available
+
+    if (decodedBrandId) {
+      this.loading = true;
+      this.productService.getProductsByBrand(decodedBrandId).subscribe({
         next: (response) => {
           this.products = response.data;
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error fetching products by brand:', error);
+          this.loading = false;
         },
       });
     }
