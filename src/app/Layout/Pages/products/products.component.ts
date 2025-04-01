@@ -5,16 +5,19 @@ import { BrandsService } from '../../../Shared/Services/brands/brands.service';
 import { CategoryService } from '../../../Shared/Services/category/category.service';
 import { ProductService } from '../../../Shared/Services/product/product.service';
 import { ProductCartComponent } from '../product-cart/product-cart.component';
+import { SearchService } from '../../../Shared/Services/Search/search.service';
+import { Product } from '../../../Shared/Interfaces/product';
+import { FilterPipe } from '../../../Shared/Pipe/filter.pipe';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, ProductCartComponent],
+  imports: [CommonModule, ProductCartComponent,FilterPipe],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent implements OnInit {
-  products: any[] = [];
+  products: Product[] = [];
   brands: any[] = [];
   categories: any[] = [];
   loading: boolean = false;
@@ -23,14 +26,16 @@ export class ProductsComponent implements OnInit {
   visibleBrands: any[] = [];
   visibleCategories: any[] = [];
   selectedCategoryId: string = '';
-  selectedBrandId: string = ''; // Added for brand selection
+  selectedBrandId: string = ''; 
+  searchTerm: string = '';
 
   constructor(
     private productService: ProductService,
     private brandsService: BrandsService,
     private categoryService: CategoryService,
     private route: ActivatedRoute, // Keep ActivatedRoute for accessing route params
-    private router: Router // Correctly inject Router for navigating
+    private router: Router, // Correctly inject Router for navigating
+    private searchService: SearchService
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +50,10 @@ export class ProductsComponent implements OnInit {
     this.fetchCategories();
     this.getProductsByCategory(); // Fetch products by category if applicable
     this.getProductsByBrand(); // Fetch products by brand if applicable
+
+    this.searchService.currentSearchTerm.subscribe(term => {
+      this.searchTerm = term;
+    });
   }
 
   fetchProducts(): void {
@@ -192,4 +201,6 @@ export class ProductsComponent implements OnInit {
       });
     }
   }
+
+  
 }

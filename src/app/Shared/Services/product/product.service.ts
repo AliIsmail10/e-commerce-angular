@@ -12,7 +12,11 @@ export class ProductService {
   getAllProducts(): Observable<any> {
     return this._HttpClient.get(`${Enviroment.baseUrl}/api/v1/products`);
   }
-
+  searchProducts(query: string): Observable<any> {
+    return this._HttpClient.get(`${Enviroment.baseUrl}/api/v1/products`, {
+      params: { title: query }
+    });
+  }
   getDetails(pId: string): Observable<any> {
     return this._HttpClient.get(`${Enviroment.baseUrl}/api/v1/products/${pId}`);
   }

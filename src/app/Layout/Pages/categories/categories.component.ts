@@ -16,7 +16,7 @@ interface Category {
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
 })
 export class CategoriesComponent implements OnInit {
   categories: Category[] = [];

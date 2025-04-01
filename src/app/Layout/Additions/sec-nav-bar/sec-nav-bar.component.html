@@ -10,17 +10,23 @@
             </div>
 
             <div class="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
-              
-                <form action="#" class="hm-searchbox">
-                    <select class="nice-select select-search-category">
-                        <option value="0">All Categories</option>
-                     
-                     @for (item of categories; track $index) {
-                        <option [value]="item.name">{{ item.name }}</option>
-                     }    
+            <form #searchForm="ngForm" (ngSubmit)="onCategorySelect()" class="hm-searchbox">
+                    <select class="nice-select select-search-category" 
+                            [(ngModel)]="selectedCategory" 
+                            name="category"
+                            (change)="onCategorySelect()">
+                        <option value="" selected disabled>All Categories</option>
+                        @for (item of categories; track $index) {
+                            <option [value]="item._id">{{ item.name }}</option>
+                        }
                     </select>
-                    <input type="text" placeholder="Enter your search key ...">
-                    <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
+                    <input type="text" 
+                    placeholder="Enter your search key ..." 
+                    [(ngModel)]="searchQuery" 
+                    name="search"
+                    (input)="onSearchInput()">
+                        
+         <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
                 </form>
              
                 <div class="header-middle-right">

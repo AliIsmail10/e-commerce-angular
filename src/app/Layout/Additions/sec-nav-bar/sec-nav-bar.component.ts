@@ -1,13 +1,16 @@
 import { AfterViewInit, Component, computed, OnInit, signal } from '@angular/core';
 import jQuery from 'jquery';
 import { CategoryService } from '../../../Shared/Services/category/category.service';
-import { RouterModule } from '@angular/router';
+import { NavigationExtras, Router, RouterModule } from '@angular/router';
 import { WishlistService } from '../../../Shared/Services/wishlist/wishlist.service';
 import { CartService } from '../../../Shared/Services/cart/cart.service';
+import { FormsModule } from '@angular/forms';
+import { ProductService } from '../../../Shared/Services/product/product.service';
+import { SearchService } from '../../../Shared/Services/Search/search.service';
 
 @Component({
   selector: 'app-sec-nav-bar',
-  imports: [RouterModule],
+  imports: [RouterModule,FormsModule],
   templateUrl: './sec-nav-bar.component.html',
   styleUrl: './sec-nav-bar.component.css'
 })
@@ -22,7 +25,9 @@ export class SecNavBarComponent implements AfterViewInit, OnInit {
   constructor(
     private categoryService: CategoryService,
     private _WishlistService: WishlistService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router,
+    private SearchService:SearchService
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +74,7 @@ export class SecNavBarComponent implements AfterViewInit, OnInit {
       $(this).siblings('.ht-setting, .ht-currency, .ht-language, .minicart, .cw-sub-menu li').slideToggle();
     });
     $('.ht-setting-trigger.is-active').siblings('.catmenu-body').slideDown();
+    
   }
 
   fetchCategories(): void {
@@ -80,5 +86,33 @@ export class SecNavBarComponent implements AfterViewInit, OnInit {
         console.error('Error fetching categories:', error);
       },
     });
+  }
+
+  selectedCategory: string = '';
+  searchQuery: string = '';
+  currentCategory: string = '';
+
+  onCategorySelect(): void {
+    this.searchQuery='';
+    const navigationExtras: NavigationExtras = {
+      queryParams: { 'category[in]': this.selectedCategory },
+      queryParamsHandling: 'merge',
+      skipLocationChange: false
+    };
+  
+      if (this.selectedCategory === this.currentCategory) {
+        this.searchQuery = '';
+      this.router.navigate(['/refresh'], navigationExtras)
+        .then(() => this.router.navigate(['/products'], navigationExtras));
+    } else {
+      this.searchQuery = '';
+      this.currentCategory = this.selectedCategory;
+      this.router.navigate(['/products'], navigationExtras);
+    }
+  }
+
+  onSearchInput(): void {
+    this.SearchService.updateSearchTerm(this.searchQuery);
+
   }
 }

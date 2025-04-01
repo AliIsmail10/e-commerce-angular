@@ -1,169 +1,217 @@
 <!-- product-list.component.html -->
 <div class="content-wraper pt-60 pb-60 pt-sm-30">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-9 order-1 order-lg-2">
-                <!-- Banner Area -->
-                <div class="single-banner shop-page-banner">
-                    <a href="#">
-                        <img src="images/bg-banner/2.jpg" alt="Li's Static Banner">
-                    </a>
-                </div>
-                <!-- End Banner Area -->
-
-                <!-- Shop Top Bar -->
-                <div class="shop-top-bar mt-30">
-                    <div class="shop-bar-inner">
-                        <div class="product-view-mode">
-                            <ul class="nav shop-item-filter-list" role="tablist">
-                                <li class="active" role="presentation">
-                                    <a aria-selected="true" class="active show" data-toggle="tab" role="tab" aria-controls="grid-view" href="#grid-view">
-                                        <i class="fa fa-th"></i>
-                                    </a>
-                                </li>
-                                <li role="presentation">
-                                    <a data-toggle="tab" role="tab" aria-controls="list-view" href="#list-view">
-                                        <i class="fa fa-th-list"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="toolbar-amount">
-                            <span>Showing 1 to {{products.length}} of {{products.length}}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="product-select-box">
-                        <div class="product-short">
-                            <p>Sort By:</p>
-                            <select class="nice-select">
-                                <option value="trending">Relevance</option>
-                                <option value="sales">Name (A - Z)</option>
-                                <option value="sales">Name (Z - A)</option>
-                                <option value="rating">Price (Low > High)</option>
-                                <option value="date">Rating (Lowest)</option>
-                                <option value="price-asc">Model (A - Z)</option>
-                                <option value="price-asc">Model (Z - A)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Shop Top Bar -->
-
-                <!-- Products Wrapper -->
-                <div class="shop-products-wrapper">
-                    <div class="tab-content">
-                        <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
-                            <div class="product-area shop-product-area">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-sm-6 mt-40" *ngFor="let product of products">
-                                        <app-product-cart [product]="product"></app-product-cart>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Products Wrapper -->
-            </div>
-
-            <!-- Sidebar -->
-            <div class="col-lg-3 order-2 order-lg-1">
-                <!-- Categories Box -->
-                <div class="sidebar-categores-box mt-sm-30 mt-xs-30">
-                    <div class="sidebar-title">
-                        <h2>Laptop</h2>
-                    </div>
-                    <div class="category-sub-menu">
-                        <ul>
-                            <li class="has-sub"><a href="#">Prime Video</a>
-                                <ul>
-                                    <li><a href="#">All Videos</a></li>
-                                    <li><a href="#">Blouses</a></li>
-                                    <li><a href="#">Evening Dresses</a></li>
-                                    <li><a href="#">Summer Dresses</a></li>
-                                </ul>
-                            </li>
-                            <!-- More categories here -->
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Filter Box -->
-                <div class="sidebar-categores-box">
-                    <div class="sidebar-title">
-                        <h2>Filter By</h2>
-                    </div>
-                    <button class="btn-clear-all mb-sm-30 mb-xs-30">Clear all</button>
-                    
-                    <!-- Brands Filter -->
-                    <div class="filter-sub-area">
-                        <h5 class="filter-sub-titel">Brands</h5>
-                        <div class="categori-checkbox">
-                            <form>
-                                <ul>
-                                    <li *ngFor="let brand of visibleBrands">
-                                        <!-- Add the brand _id as value to the checkbox input -->
-                                        <input 
-                                            type="checkbox" 
-                                            [value]="brand._id" 
-                                            (change)="onBrandChange($event, brand._id)" 
-                                            [checked]="selectedBrandId === brand._id" 
-                                            name="brand">
-                                        <a href="#">{{ brand.name }}</a>
-                                    </li>
-                                </ul>
-                            </form>
-                        </div>
-                        <button *ngIf="brands.length > 5" (click)="toggleShowMore('brands')" class="btn btn-link">
-                            {{ showMoreBrands ? 'Show Less' : 'Show More' }}
-                        </button>
-                    </div>
-                    
-                    
-
-                    <!-- Categories Filter -->
-                    
-                    <div class="filter-sub-area">
-                        <h5 class="filter-sub-titel">Categories</h5>
-                        <div class="categori-checkbox">
-                            <form>
-                                <ul>
-                                    <li *ngFor="let category of visibleCategories">
-                                        <!-- Add the category _id as value to the checkbox input -->
-                                        <input 
-                                            type="checkbox" 
-                                            [value]="category._id" 
-                                            (change)="onCategoryChange($event, category._id)" 
-                                            [checked]="selectedCategoryId === category._id" 
-                                            name="category">
-                                        <a href="#">{{ category.name }}</a>
-                                    </li>
-                                </ul>
-                            </form>
-                        </div>
-                        <button *ngIf="categories.length > 5" (click)="toggleShowMore('categories')" class="btn btn-link">
-                            {{ showMoreCategories ? 'Show Less' : 'Show More' }}
-                        </button>
-                    </div>
-                    
-
-                <!-- Tags Box -->
-                <div class="sidebar-categores-box mb-sm-0 mb-xs-0">
-                    <div class="sidebar-title">
-                        <h2>Laptop</h2>
-                    </div>
-                    <div class="category-tags">
-                        <ul>
-                            <li><a href="#">Devita</a></li>
-                            <li><a href="#">Cameras</a></li>
-                            <li><a href="#">Sony</a></li>
-                            <!-- More tags here -->
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- End Sidebar -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-9 order-1 order-lg-2">
+        <!-- Banner Area -->
+        <div class="single-banner shop-page-banner">
+          <a href="#">
+            <img src="images/bg-banner/2.jpg" alt="Li's Static Banner" />
+          </a>
         </div>
+        <!-- End Banner Area -->
+
+        <!-- Shop Top Bar -->
+        <div class="shop-top-bar mt-30">
+          <div class="shop-bar-inner">
+            <div class="product-view-mode">
+              <ul class="nav shop-item-filter-list" role="tablist">
+                <li class="active" role="presentation">
+                  <a
+                    aria-selected="true"
+                    class="active show"
+                    data-toggle="tab"
+                    role="tab"
+                    aria-controls="grid-view"
+                    href="#grid-view"
+                  >
+                    <i class="fa fa-th"></i>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a
+                    data-toggle="tab"
+                    role="tab"
+                    aria-controls="list-view"
+                    href="#list-view"
+                  >
+                    <i class="fa fa-th-list"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="toolbar-amount">
+              <span
+                >Showing 1 to {{ products.length }} of
+                {{ products.length }}</span
+              >
+            </div>
+          </div>
+
+          <div class="product-select-box">
+            <div class="product-short">
+              <p>Sort By:</p>
+              <select class="nice-select">
+                <option value="trending">Relevance</option>
+                <option value="sales">Name (A - Z)</option>
+                <option value="sales">Name (Z - A)</option>
+                <option value="rating">Price (Low > High)</option>
+                <option value="date">Rating (Lowest)</option>
+                <option value="price-asc">Model (A - Z)</option>
+                <option value="price-asc">Model (Z - A)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- End Shop Top Bar -->
+
+        <!-- Products Wrapper -->
+        <div class="shop-products-wrapper">
+          <div class="tab-content">
+            <div
+              id="grid-view"
+              class="tab-pane fade active show"
+              role="tabpanel"
+            >
+              <div class="product-area shop-product-area">
+                <div class="row">
+                    @if (products.length > 0) {
+                      @for (product of products | filter:searchTerm; track product._id) {
+                        <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
+                          <app-product-cart [product]="product"></app-product-cart>
+                        </div>
+                      }
+                      @empty {
+                        <div class="col-lg-12 col-md-12 col-sm-12 mt-40">
+                          <h3 class="text-center d-flex flex-column justify-content-center align-items-center">
+                            No products found
+                            <img class="w-50" src="https://media.istockphoto.com/id/1441438513/vector/empty-classic-shopping-cart-flat-side-view-of-shopping-cart-or-trolley.jpg?s=612x612&w=0&k=20&c=x2OKIckXFG0KlHbcwgvIrtUKpp3NsXLqEcUxbZQmXIA=" alt="Empty cart">
+                          </h3>
+                        </div>
+                      }
+                    } @else {
+                      <div class="col-lg-12 col-md-12 col-sm-12 mt-40">
+                        <h3 class="text-center d-flex flex-column justify-content-center align-items-center">
+                          No products found
+                          <img class="w-50" src="https://media.istockphoto.com/id/1441438513/vector/empty-classic-shopping-cart-flat-side-view-of-shopping-cart-or-trolley.jpg?s=612x612&w=0&k=20&c=x2OKIckXFG0KlHbcwgvIrtUKpp3NsXLqEcUxbZQmXIA=" alt="Empty cart">
+                       
+                        </h3>
+                      </div>
+                    }
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Products Wrapper -->
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-3 order-2 order-lg-1">
+        <!-- Categories Box -->
+        <div class="sidebar-categores-box mt-sm-30 mt-xs-30">
+          <div class="sidebar-title">
+            <h2>Laptop</h2>
+          </div>
+          <div class="category-sub-menu">
+            <ul>
+              <li class="has-sub">
+                <a href="#">Prime Video</a>
+                <ul>
+                  <li><a href="#">All Videos</a></li>
+                  <li><a href="#">Blouses</a></li>
+                  <li><a href="#">Evening Dresses</a></li>
+                  <li><a href="#">Summer Dresses</a></li>
+                </ul>
+              </li>
+              <!-- More categories here -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- Filter Box -->
+        <div class="sidebar-categores-box">
+          <div class="sidebar-title">
+            <h2>Filter By</h2>
+          </div>
+          <button class="btn-clear-all mb-sm-30 mb-xs-30">Clear all</button>
+
+          <!-- Brands Filter -->
+          <div class="filter-sub-area">
+            <h5 class="filter-sub-titel">Brands</h5>
+            <div class="categori-checkbox">
+              <form>
+                <ul>
+                  <li *ngFor="let brand of visibleBrands">
+                    <!-- Add the brand _id as value to the checkbox input -->
+                    <input
+                      type="checkbox"
+                      [value]="brand._id"
+                      (change)="onBrandChange($event, brand._id)"
+                      [checked]="selectedBrandId === brand._id"
+                      name="brand"
+                    />
+                    <a href="#">{{ brand.name }}</a>
+                  </li>
+                </ul>
+              </form>
+            </div>
+            <button
+              *ngIf="brands.length > 5"
+              (click)="toggleShowMore('brands')"
+              class="btn btn-link"
+            >
+              {{ showMoreBrands ? "Show Less" : "Show More" }}
+            </button>
+          </div>
+
+          <!-- Categories Filter -->
+
+          <div class="filter-sub-area">
+            <h5 class="filter-sub-titel">Categories</h5>
+            <div class="categori-checkbox">
+              <form>
+                <ul>
+                  <li *ngFor="let category of visibleCategories">
+                    <!-- Add the category _id as value to the checkbox input -->
+                    <input
+                      type="checkbox"
+                      [value]="category._id"
+                      (change)="onCategoryChange($event, category._id)"
+                      [checked]="selectedCategoryId === category._id"
+                      name="category"
+                    />
+                    <a href="#">{{ category.name }}</a>
+                  </li>
+                </ul>
+              </form>
+            </div>
+            <button
+              *ngIf="categories.length > 5"
+              (click)="toggleShowMore('categories')"
+              class="btn btn-link"
+            >
+              {{ showMoreCategories ? "Show Less" : "Show More" }}
+            </button>
+          </div>
+
+          <!-- Tags Box -->
+          <div class="sidebar-categores-box mb-sm-0 mb-xs-0">
+            <div class="sidebar-title">
+              <h2>Laptop</h2>
+            </div>
+            <div class="category-tags">
+              <ul>
+                <li><a href="#">Devita</a></li>
+                <li><a href="#">Cameras</a></li>
+                <li><a href="#">Sony</a></li>
+                <!-- More tags here -->
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- End Sidebar -->
+      </div>
     </div>
+  </div>
 </div>
