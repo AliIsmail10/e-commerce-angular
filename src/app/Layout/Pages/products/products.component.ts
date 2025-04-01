@@ -1,17 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router'; // Import ActivatedRoute
+import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { FilterPipe } from '../../../Shared/Pipe/filter.pipe';
 import { BrandsService } from '../../../Shared/Services/brands/brands.service';
 import { CategoryService } from '../../../Shared/Services/category/category.service';
 import { ProductService } from '../../../Shared/Services/product/product.service';
-import { ProductCartComponent } from '../product-cart/product-cart.component';
-import { FilterPipe } from '../../../Shared/Pipe/filter.pipe';
 import { SearchService } from '../../../Shared/Services/Search/search.service';
+import { ProductCartComponent } from '../product-cart/product-cart.component';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, ProductCartComponent,FilterPipe],
+  imports: [CommonModule, ProductCartComponent, FilterPipe],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
 })
@@ -25,57 +27,63 @@ export class ProductsComponent implements OnInit {
   visibleBrands: any[] = [];
   visibleCategories: any[] = [];
   selectedCategoryId: string = '';
-  selectedBrandId: string = ''; // Added for brand selection
+  selectedBrandId: string = '';
   searchTerm: string = '';
+  sortBy: string = ''; // '' (default), 'price', or '-price'
 
   constructor(
     private productService: ProductService,
     private brandsService: BrandsService,
     private categoryService: CategoryService,
-    private route: ActivatedRoute, // Keep ActivatedRoute for accessing route params
-    private router: Router, // Correctly inject Router for navigating
-    private SearchService:SearchService
-    
+    private route: ActivatedRoute,
+    private router: Router,
+    private searchService: SearchService
   ) {}
 
- // In products.component.ts
-ngOnInit(): void {
-  this.route.queryParamMap.subscribe(params => {
-    const categoryId = params.get('category[in]');
-    const brandId = params.get('brand');
-    
-    if (categoryId) {
-      this.selectedCategoryId = categoryId;
-      this.getProductsByCategory();
-    } else if (brandId) {
-      this.selectedBrandId = brandId;
-      this.getProductsByBrand();
-    } else {
-      this.fetchProducts();
-    }
-  });
+  ngOnInit(): void {
+    this.fetchBrands();
+    this.fetchCategories();
 
-  this.fetchBrands();
-  this.fetchCategories();
+    combineLatest([
+      this.route.queryParamMap,
+      this.searchService.currentSearchTerm,
+    ])
+      .pipe(
+        switchMap(([params, searchTerm]) => {
+          this.searchTerm = searchTerm;
+          const categoryId = params.get('category[in]');
+          const brandId = params.get('brand');
+          const sort = params.get('sort') || this.sortBy; // Preserve sort from URL or component state
 
-  this.SearchService.currentSearchTerm.subscribe((searchTerm) => {
-    this.searchTerm = searchTerm;
-    if (searchTerm) {
-      this.selectedCategoryId = '';
-      this.selectedBrandId = '';
-    }
-  });
-}
+          this.selectedCategoryId = categoryId || '';
+          this.selectedBrandId = brandId || '';
+          this.sortBy = sort || '';
 
-  fetchProducts(): void {
-    this.productService.getAllProducts().subscribe({
-      next: (response) => {
-        this.products = response.data;
-      },
-      error: (error) => {
-        console.error('Error fetching products:', error);
-      },
-    });
+          this.loading = true;
+          if (searchTerm) {
+            return this.productService.searchProducts(searchTerm, this.sortBy);
+          } else if (categoryId) {
+            return this.productService.getProductsByCategory(
+              categoryId,
+              this.sortBy
+            );
+          } else if (brandId) {
+            return this.productService.getProductsByBrand(brandId, this.sortBy);
+          } else {
+            return this.productService.getAllProducts(this.sortBy);
+          }
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          this.products = response.data;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching products:', error);
+          this.loading = false;
+        },
+      });
   }
 
   fetchBrands(): void {
@@ -84,9 +92,7 @@ ngOnInit(): void {
         this.brands = response.data;
         this.updateVisibleBrands();
       },
-      error: (error) => {
-        console.error('Error fetching brands:', error);
-      },
+      error: (error) => console.error('Error fetching brands:', error),
     });
   }
 
@@ -96,9 +102,7 @@ ngOnInit(): void {
         this.categories = response.data;
         this.updateVisibleCategories();
       },
-      error: (error) => {
-        console.error('Error fetching categories:', error);
-      },
+      error: (error) => console.error('Error fetching categories:', error),
     });
   }
 
@@ -106,34 +110,6 @@ ngOnInit(): void {
     this.visibleBrands = this.showMoreBrands
       ? this.brands
       : this.brands.slice(0, 5);
-  }
-
-  onCategoryChange(event: any, categoryId: string): void {
-    if (event.target.checked) {
-      this.selectedCategoryId = categoryId; // Set single category ID
-    } else {
-      this.selectedCategoryId = ''; // Clear category if unchecked
-    }
-
-    // Update query param for category
-    this.updateQueryParams();
-
-    // Fetch filtered products based on selected category
-    this.getProductsByCategory();
-  }
-
-  onBrandChange(event: any, brandId: string): void {
-    if (event.target.checked) {
-      this.selectedBrandId = brandId; // Set the selected brand ID
-    } else {
-      this.selectedBrandId = ''; // Clear the selected brand ID if unchecked
-    }
-
-    // Update query param for brand
-    this.updateQueryParams();
-
-    // Fetch products based on selected brand
-    this.getProductsByBrand();
   }
 
   updateVisibleCategories(): void {
@@ -152,64 +128,41 @@ ngOnInit(): void {
     }
   }
 
-  updateQueryParams(): void {
-    let queryParams: any = {};
+  onCategoryChange(event: any, categoryId: string): void {
+    this.selectedCategoryId = event.target.checked ? categoryId : '';
+    this.updateQueryParams();
+  }
 
-    // Add selected category and brand to query params
+  onBrandChange(event: any, brandId: string): void {
+    this.selectedBrandId = event.target.checked ? brandId : '';
+    this.updateQueryParams();
+  }
+
+  onSortChange(event: any): void {
+    this.sortBy = event.target.value; // '', 'price', or '-price'
+    this.updateQueryParams();
+  }
+
+  updateQueryParams(): void {
+    const queryParams: any = {};
+
     if (this.selectedCategoryId) {
       queryParams['category[in]'] = this.selectedCategoryId;
     }
     if (this.selectedBrandId) {
       queryParams['brand'] = this.selectedBrandId;
     }
+    if (this.searchTerm) {
+      queryParams['search'] = this.searchTerm;
+    }
+    if (this.sortBy) {
+      queryParams['sort'] = this.sortBy; // e.g., 'price' or '-price'
+    }
 
-    // Update the URL with the new query params
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: queryParams,
-      queryParamsHandling: 'merge', // Keep existing query params and merge new ones
+      queryParams,
+      queryParamsHandling: '',
     });
-  }
-
-  getProductsByCategory(): void {
-    const categoryId = this.route.snapshot.queryParamMap.get('category[in]');
-    const decodedCategoryId = categoryId
-      ? decodeURIComponent(categoryId)
-      : this.selectedCategoryId; // Use selected category if available
-
-    if (decodedCategoryId) {
-      this.loading = true;
-      this.productService.getProductsByCategory(decodedCategoryId).subscribe({
-        next: (response) => {
-          this.products = response.data;
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Error fetching products by category:', error);
-          this.loading = false;
-        },
-      });
-    }
-  }
-
-  getProductsByBrand(): void {
-    const brandId = this.route.snapshot.queryParamMap.get('brand');
-    const decodedBrandId = brandId
-      ? decodeURIComponent(brandId)
-      : this.selectedBrandId; // Use selected brand if available
-
-    if (decodedBrandId) {
-      this.loading = true;
-      this.productService.getProductsByBrand(decodedBrandId).subscribe({
-        next: (response) => {
-          this.products = response.data;
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Error fetching products by brand:', error);
-          this.loading = false;
-        },
-      });
-    }
   }
 }
