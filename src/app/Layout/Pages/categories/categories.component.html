@@ -1,19 +1,29 @@
 <div class="container mt-4">
   <h2 class="categories-heading text-center">Explore Categories</h2>
 
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="loading" class="text-center my-4">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
   <div class="row">
     <div *ngFor="let category of categories" class="col-md-4 mb-3">
-      <a 
+      <div 
         class="card category-card shadow-sm"
-        [routerLink]="['/products']"
-        [queryParams]="{ 'category[in]': category._id }"
+        style="cursor: pointer;"
+        (click)="viewProductsByCategory(category._id)"
       >
         <img [src]="category.image" class="card-img-top category-image" [alt]="category.name">
         <div class="card-body text-center">
           <h5 class="card-title">{{ category.name }}</h5>
           <p class="category-date">{{ formatDate(category.createdAt) }}</p>
         </div>
-      </a>
+      </div>
     </div>
   </div>
 
