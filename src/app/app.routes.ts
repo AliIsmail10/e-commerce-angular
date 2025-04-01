@@ -36,6 +36,8 @@ export const routes: Routes = [
     path: 'order',
     loadComponent: () =>import('./Layout/Pages/order/order.component').then(
       (m) => m.OrderComponent),
+    canActivate: [AuthGuard],
+
   },
 
   {

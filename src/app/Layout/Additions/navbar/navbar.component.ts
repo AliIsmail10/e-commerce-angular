@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../Shared/Services/auth/auth.service';
+import jQuery from 'jquery';
 
 @Component({
   selector: 'app-navbar',
@@ -9,7 +10,7 @@ import { AuthService } from '../../../Shared/Services/auth/auth.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit ,AfterViewInit {
   userName: string = '';
   islogging: boolean = false;
 
@@ -32,5 +33,7 @@ export class NavbarComponent implements OnInit {
     this.authService.logout();
   }
 
+  ngAfterViewInit() {
 
+  }
 }

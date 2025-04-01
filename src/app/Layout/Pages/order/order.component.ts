@@ -131,31 +131,7 @@ export class OrderComponent implements OnInit {
       }]
     };
 
-    // const firstOrder = this.AllOrders[0];
-    // if (firstOrder.cartItems) {
-    //   this.productDistributionChartData = {
-    //     labels: firstOrder.cartItems.map((item: CartItem) => 
-    //       item.product.title.length > 20 
-    //         ? `${item.product.title.substring(0, 20)}...` 
-    //         : item.product.title
-    //     ),
-    //     datasets: [{
-    //       label: 'Product Prices',
-    //       data: firstOrder.cartItems.map((item: CartItem) => item.price),
-    //       backgroundColor: [
-    //         this.goldenPalette[0],
-    //         this.complementaryPalette[0],
-    //         this.goldenPalette[2],
-    //         this.complementaryPalette[2],
-    //         this.complementaryPalette[3]
-    //       ],
-    //       borderWidth: 1,
-    //       hoverOffset: 10
-    //     }]
-    //   };
-    // }
-
-    // 3. Payment Method Chart
+  
     const paymentMethods = this.AllOrders.reduce((acc: Record<string, number>, order: Order) => {
       acc[order.paymentMethodType] = (acc[order.paymentMethodType] || 0) + 1;
       return acc;
