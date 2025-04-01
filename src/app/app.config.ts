@@ -7,8 +7,9 @@ import { provideToastr } from 'ngx-toastr';
 import { headerInterceptor } from './Shared/interceptors/Header/header.interceptor';
 import { loaderInterceptor } from './Shared/interceptors/Loader/loader.interceptor';
 import { errorInterceptor } from './Shared/interceptors/Error/error.interceptor';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 export const appConfig: ApplicationConfig = {
-  providers: [provideHttpClient(withFetch(),withInterceptors([headerInterceptor,loaderInterceptor,errorInterceptor])),provideAnimations(),provideToastr(),provideZoneChangeDetection({ eventCoalescing: true }),
+  providers: [provideCharts(withDefaultRegisterables()),provideHttpClient(withFetch(),withInterceptors([headerInterceptor,loaderInterceptor,errorInterceptor])),provideAnimations(),provideToastr(),provideZoneChangeDetection({ eventCoalescing: true }),
   provideRouter( routes,
     withViewTransitions(),withInMemoryScrolling({ scrollPositionRestoration: 'top' })) 
 ]

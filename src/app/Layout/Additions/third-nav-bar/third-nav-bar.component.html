@@ -1,32 +1,61 @@
-
-<div class="header-bottom header-sticky d-none d-lg-block d-xl-block">
+<nav class="navbar navbar-expand-lg bg-warning position-sticky mb-30">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <!-- Begin Header Bottom Menu Area -->
-                <div class="hb-menu">
-                    <nav>
-                        <ul>
-                            <li><a [routerLink]="['/home']" routerLinkActive="router-link-active" >Home</a>
-                            </li>
-                            <li class=""><a [routerLink]="['/products']" routerLinkActive="router-link-active" >Products</a>
-                            </li>
-                            
-                            <li class=""><a [routerLink]="['/categories']" routerLinkActive="router-link-active" >Categories</a>
-                            </li>
-                            <li class="dropdown-holder"><a [routerLink]="['/brands']" routerLinkActive="router-link-active" >Brands</a>
-                            </li>
-                            
-                            <li class="megamenu-static-holder">                            
-                                <a [routerLink]="['/allorders']" routerLinkActive="router-link-active" >Cart</a>
-                              
-                            </li>
-                            <li><a [routerLink]="['/contact']" routerLinkActive="router-link-active" >Contact Us</a></li>
-                            <li> <a [routerLink]="['/about']" routerLinkActive="router-link-active" >About Us</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+        <a class="navbar-brand fw-bold" routerLink="/home">
+            <!-- <i class="fa fa-shopping-bag me-2"></i>MyShop -->
+            <!-- <img src="images/menu/logo/1.jpg" alt=""> -->
+             
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link px-3" routerLink="/home" routerLinkActive="active" 
+                       [routerLinkActiveOptions]="{exact: true}">
+                        <i class="fa fa-home me-1"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" routerLink="/products" routerLinkActive="active">
+                        <i class="fa fa-box-open me-1"></i> Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" routerLink="/categories" routerLinkActive="active">
+                        <i class="fa fa-list me-1"></i> Categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" routerLink="/brands" routerLinkActive="active">
+                        <i class="fa fa-tags me-1"></i> Brands
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" routerLink="/allorders" routerLinkActive="active">
+                        <i class="fa fa-shopping-cart me-1"></i> Cart
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" routerLink="/contact" routerLinkActive="active">
+                        <i class="fa fa-envelope me-1"></i> Contact
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" routerLink="/about" routerLinkActive="active">
+                        <i class="fa fa-info-circle me-1"></i> About
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" routerLink="/order" routerLinkActive="active">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        All Orders
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
-</div>
+</nav>

@@ -64,9 +64,7 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		text-align: center;
 	}
 	/*Header Bottom*/
-	.header-bottom, .header-sticky.sticky {
-		background: transparent;
-	}
+	
 	/*Mobile Menu*/
 	.megamenu-static-holder {
 		position: relative !important;
@@ -266,9 +264,7 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		margin-top: 2px;
 	}
 	/*Header Bottom*/
-	.header-bottom, .header-sticky.sticky {
-		background: transparent;
-	}
+
 	/*Mobile Menu*/
 	.megamenu-static-holder {
 		position: relative !important;
@@ -445,9 +441,7 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		right: auto;
 	}
 	/*Header Bottom*/
-	.header-bottom, .header-sticky.sticky {
-		background: transparent;
-	}
+	
 	/*Mobile Menu*/
 	.megamenu-static-holder {
 		position: relative !important;
@@ -672,9 +666,7 @@ Note: responsive.css, All Responsive CSS Style For This Theme Included In This F
 		top: -10px;
 	}
 	/*Header Bottom*/
-	.header-bottom, .header-sticky.sticky {
-		background: transparent;
-	}
+	
 	/*Mobile Menu*/
 	.megamenu-static-holder {
 		position: relative !important;

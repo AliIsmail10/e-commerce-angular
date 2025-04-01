@@ -29,6 +29,7 @@
 "styles": [
     "node_modules/bootstrap/dist/css/bootstrap.min.css",
       "node_modules/font-awesome/css/font-awesome.min.css",
+      "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
       "node_modules/material-design-iconic-font/dist/css/material-design-iconic-font.min.css",
       "node_modules/animate.css/animate.min.css",
       "node_modules/slick-carousel/slick/slick.css",
@@ -45,12 +46,14 @@
 ],
 "scripts": [
       "node_modules/jquery/dist/jquery.min.js",
+      "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
       "node_modules/jquery-ui/dist/jquery-ui.min.js",
       "node_modules/venobox/dist/venobox.min.js",
       "node_modules/magnific-popup/dist/jquery.magnific-popup.min.js",
       "node_modules/jquery-nice-select/js/jquery.nice-select.min.js",
       "node_modules/modernizr/src/Modernizr.js",
       "node_modules/slick-carousel/slick/slick.min.js"
+
 ]
   },
   "configurations": {

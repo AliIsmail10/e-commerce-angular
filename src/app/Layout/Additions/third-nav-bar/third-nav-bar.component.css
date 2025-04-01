@@ -1,0 +1,92 @@
+
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    padding: 15px 0;
+    background-color: #FED700 !important;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    color: #000 !important;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    color: #000 !important;
+}
+
+.navbar-nav .nav-link:hover {
+    transform: translateY(-2px);
+    color: #333 !important;
+}
+
+.navbar-nav .nav-link.active {
+    color: #000 !important;
+    font-weight: 700;
+    border-bottom: 2px solid #000;
+}
+
+.navbar-nav .nav-link i {
+    color: #000;
+}
+
+.header-sticky {
+    position: sticky !important;
+    top: 0;
+    z-index: 1020;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        padding: 20px 0;
+        background: #FED700 !important;
+        border-radius: 10px;
+        margin-top: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 10px 15px;
+        margin: 5px 0;
+        color: #000 !important;
+    }
+    
+    .navbar-nav .nav-link:hover {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 5px;
+    }
+    
+    .navbar-toggler {
+        border-color: #000;
+    }
+    
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+}
+
+/* Animation for navbar items */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.navbar-nav .nav-item {
+    animation: fadeIn 0.5s ease forwards;
+    opacity: 0;
+}
+
+.navbar-nav .nav-item:nth-child(1) { animation-delay: 0.1s; }
+.navbar-nav .nav-item:nth-child(2) { animation-delay: 0.2s; }
+.navbar-nav .nav-item:nth-child(3) { animation-delay: 0.3s; }
+.navbar-nav .nav-item:nth-child(4) { animation-delay: 0.4s; }
+.navbar-nav .nav-item:nth-child(5) { animation-delay: 0.5s; }
+.navbar-nav .nav-item:nth-child(6) { animation-delay: 0.6s; }
+.navbar-nav .nav-item:nth-child(7) { animation-delay: 0.7s; }

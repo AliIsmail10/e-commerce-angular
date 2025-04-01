@@ -43,16 +43,55 @@ export interface Product {
 interface Data {
   _id: string;
   cartOwner: string;
-  products: Product2[];
+  products: CartItem[];
   createdAt: string;
   updatedAt: string;
   __v: number;
   totalCartPrice: number;
 }
 
-interface Product2 {
-  count: number;
-  _id: string;
-  product: Product;
-  price: number;
+export interface CartItem {
+  count: number
+  _id: string
+  product: Product
+  price: number
+}
+
+export interface Brand {
+  _id: string
+  name: string
+  slug: string
+  image: string
+}
+
+
+export interface ShippingAddress {
+  details: string
+  phone: string
+  city: string
+}
+
+export interface Order {
+  shippingAddress: ShippingAddress
+  taxPrice: number
+  shippingPrice: number
+  totalOrderPrice: number
+  paymentMethodType: string
+  isPaid: boolean
+  isDelivered: boolean
+  _id: string
+  user: User
+  cartItems: CartItem[]
+  paidAt: string
+  createdAt: string
+  updatedAt: string
+  id: number
+  [key: string]: any; 
+}
+
+export interface User {
+  _id: string
+  name: string
+  email: string
+  phone: string
 }

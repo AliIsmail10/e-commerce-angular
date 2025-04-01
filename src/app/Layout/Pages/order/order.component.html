@@ -1,0 +1,34 @@
+<div class="dashboard-container">
+    <div class="chart-card">
+      <h2 class="chart-title">Order Prices</h2>
+      <div class="chart-wrapper">
+        <canvas baseChart
+          [data]="priceChartData"
+          [type]="'bar'"
+          [options]="chartOptions">
+        </canvas>
+      </div>
+    </div>
+<!--     
+    <div class="chart-card">
+      <h2 class="chart-title">Product Distribution in Order #{{AllOrders[0]?.id}}</h2>
+      <div class="chart-wrapper">
+        <canvas baseChart
+          [data]="productDistributionChartData"
+          [type]="'pie'"
+          [options]="chartOptions">
+        </canvas>
+      </div>
+    </div> -->
+    
+    <div class="chart-card">
+      <h2 class="chart-title">Payment Methods</h2>
+      <div class="chart-wrapper">
+        <canvas baseChart
+          [data]="paymentMethodChartData"
+          [type]="'doughnut'"
+          [options]="chartOptions">
+        </canvas>
+      </div>
+    </div>
+  </div>

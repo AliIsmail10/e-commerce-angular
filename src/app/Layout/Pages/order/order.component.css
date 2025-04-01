@@ -1,0 +1,55 @@
+/* Professional styling with golden theme */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  padding: 1.5rem;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chart-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.chart-title {
+  color: #333;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #FED700;
+  padding-bottom: 0.5rem;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 350px;
+  width: 100%;
+}
+
+/* Chart.js specific styling */
+:host ::ng-deep .chart-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+:host ::ng-deep .chart-legend .legend-item {
+  display: flex;
+  align-items: center;
+  margin: 0 1rem 0.5rem 0;
+}
+
+:host ::ng-deep .chart-legend .legend-label {
+  margin-left: 0.5rem;
+  font-size: 0.85rem;
+  color: #555;
+}

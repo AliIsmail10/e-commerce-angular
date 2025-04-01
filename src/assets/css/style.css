@@ -1725,7 +1725,7 @@ textarea:focus {
 }
 /*Header Bottom Menu*/
 .header-bottom {
-		background: #fed700;
+		background: #fed700 !important;
 		margin-bottom: 20px;
 }
 .hb-menu > nav > ul {
@@ -2989,7 +2989,8 @@ text-align: center;
 .li-header-4 .header-bottom {
 	background: #293a6c;
 	border-top: 1px solid rgba(255,255,255,.1);
-	color: #ffffff;
+	color: #ffffff
+	;
 }
 .li-header-4 .hb-menu nav > ul > li > a, 
 .li-header-4 .hb-menu nav > ul > li > a:after {
