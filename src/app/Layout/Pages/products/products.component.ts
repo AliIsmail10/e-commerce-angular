@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'; // Import ActivatedRoute
+import { Subscription } from 'rxjs'; // Import Subscription for handling observable cleanup
 import { BrandsService } from '../../../Shared/Services/brands/brands.service';
 import { CategoryService } from '../../../Shared/Services/category/category.service';
 import { ProductService } from '../../../Shared/Services/product/product.service';
@@ -13,7 +14,7 @@ import { ProductCartComponent } from '../product-cart/product-cart.component';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, OnDestroy {
   products: any[] = [];
   brands: any[] = [];
   categories: any[] = [];
@@ -23,7 +24,8 @@ export class ProductsComponent implements OnInit {
   visibleBrands: any[] = [];
   visibleCategories: any[] = [];
   selectedCategoryId: string = '';
-  selectedBrandId: string = ''; // Added for brand selection
+  selectedBrandId: string = '';
+  queryParamsSubscription: Subscription | undefined;
 
   constructor(
     private productService: ProductService,
@@ -34,17 +36,26 @@ export class ProductsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Check for category or brand in query params and fetch filtered products
-    if (
-      !this.route.snapshot.queryParamMap.has('category[in]') &&
-      !this.route.snapshot.queryParamMap.has('brand')
-    ) {
-      this.fetchProducts(); // Fetch all products if no filter
-    }
+    // Fetch initial data (brands and categories)
     this.fetchBrands();
     this.fetchCategories();
-    this.getProductsByCategory(); // Fetch products by category if applicable
-    this.getProductsByBrand(); // Fetch products by brand if applicable
+    this.fetchProducts(); // Fetch all products initially
+
+    // Subscribe to query param changes and update products accordingly
+    this.queryParamsSubscription = this.route.queryParams.subscribe(
+      (params) => {
+        this.selectedCategoryId = params['category[in]'] || '';
+        this.selectedBrandId = params['brand'] || '';
+        this.getProductsByFilters(); // Fetch filtered products based on the current query params
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from queryParamsSubscription when the component is destroyed
+    if (this.queryParamsSubscription) {
+      this.queryParamsSubscription.unsubscribe();
+    }
   }
 
   fetchProducts(): void {
@@ -95,11 +106,7 @@ export class ProductsComponent implements OnInit {
       this.selectedCategoryId = ''; // Clear category if unchecked
     }
 
-    // Update query param for category
-    this.updateQueryParams();
-
-    // Fetch filtered products based on selected category
-    this.getProductsByCategory();
+    this.updateQueryParams(); // Update query parameters based on the selection
   }
 
   onBrandChange(event: any, brandId: string): void {
@@ -109,11 +116,7 @@ export class ProductsComponent implements OnInit {
       this.selectedBrandId = ''; // Clear the selected brand ID if unchecked
     }
 
-    // Update query param for brand
-    this.updateQueryParams();
-
-    // Fetch products based on selected brand
-    this.getProductsByBrand();
+    this.updateQueryParams(); // Update query parameters based on the selection
   }
 
   updateVisibleCategories(): void {
@@ -151,36 +154,29 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  getProductsByCategory(): void {
-    const categoryId = this.route.snapshot.queryParamMap.get('category[in]');
-    const decodedCategoryId = categoryId
-      ? decodeURIComponent(categoryId)
-      : this.selectedCategoryId; // Use selected category if available
+  getProductsByFilters(): void {
+    this.loading = true;
 
-    if (decodedCategoryId) {
-      this.loading = true;
-      this.productService.getProductsByCategory(decodedCategoryId).subscribe({
-        next: (response) => {
-          this.products = response.data;
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Error fetching products by category:', error);
-          this.loading = false;
-        },
-      });
+    // Apply category filter if exists
+    if (this.selectedCategoryId) {
+      this.productService
+        .getProductsByCategory(this.selectedCategoryId)
+        .subscribe({
+          next: (response) => {
+            this.products = response.data;
+            this.loading = false;
+          },
+          error: (error) => {
+            console.error('Error fetching products by category:', error);
+            this.loading = false;
+          },
+        });
+      return; // Early exit if category filter is applied
     }
-  }
 
-  getProductsByBrand(): void {
-    const brandId = this.route.snapshot.queryParamMap.get('brand');
-    const decodedBrandId = brandId
-      ? decodeURIComponent(brandId)
-      : this.selectedBrandId; // Use selected brand if available
-
-    if (decodedBrandId) {
-      this.loading = true;
-      this.productService.getProductsByBrand(decodedBrandId).subscribe({
+    // Apply brand filter if exists
+    if (this.selectedBrandId) {
+      this.productService.getProductsByBrand(this.selectedBrandId).subscribe({
         next: (response) => {
           this.products = response.data;
           this.loading = false;
@@ -190,6 +186,19 @@ export class ProductsComponent implements OnInit {
           this.loading = false;
         },
       });
+      return; // Early exit if brand filter is applied
     }
+
+    // Fetch all products if no filters are applied
+    this.productService.getAllProducts().subscribe({
+      next: (response) => {
+        this.products = response.data;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching all products:', error);
+        this.loading = false;
+      },
+    });
   }
 }
