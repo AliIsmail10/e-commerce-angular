@@ -5,9 +5,8 @@ import { BrandsService } from '../../../Shared/Services/brands/brands.service';
 import { CategoryService } from '../../../Shared/Services/category/category.service';
 import { ProductService } from '../../../Shared/Services/product/product.service';
 import { ProductCartComponent } from '../product-cart/product-cart.component';
-import { SearchService } from '../../../Shared/Services/Search/search.service';
-import { Product } from '../../../Shared/Interfaces/product';
 import { FilterPipe } from '../../../Shared/Pipe/filter.pipe';
+import { SearchService } from '../../../Shared/Services/Search/search.service';
 
 @Component({
   selector: 'app-products',
@@ -17,7 +16,7 @@ import { FilterPipe } from '../../../Shared/Pipe/filter.pipe';
   styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent implements OnInit {
-  products: Product[] = [];
+  products: any[] = [];
   brands: any[] = [];
   categories: any[] = [];
   loading: boolean = false;
@@ -26,7 +25,7 @@ export class ProductsComponent implements OnInit {
   visibleBrands: any[] = [];
   visibleCategories: any[] = [];
   selectedCategoryId: string = '';
-  selectedBrandId: string = ''; 
+  selectedBrandId: string = ''; // Added for brand selection
   searchTerm: string = '';
 
   constructor(
@@ -35,26 +34,38 @@ export class ProductsComponent implements OnInit {
     private categoryService: CategoryService,
     private route: ActivatedRoute, // Keep ActivatedRoute for accessing route params
     private router: Router, // Correctly inject Router for navigating
-    private searchService: SearchService
+    private SearchService:SearchService
+    
   ) {}
 
-  ngOnInit(): void {
-    // Check for category or brand in query params and fetch filtered products
-    if (
-      !this.route.snapshot.queryParamMap.has('category[in]') &&
-      !this.route.snapshot.queryParamMap.has('brand')
-    ) {
-      this.fetchProducts(); // Fetch all products if no filter
+ // In products.component.ts
+ngOnInit(): void {
+  this.route.queryParamMap.subscribe(params => {
+    const categoryId = params.get('category[in]');
+    const brandId = params.get('brand');
+    
+    if (categoryId) {
+      this.selectedCategoryId = categoryId;
+      this.getProductsByCategory();
+    } else if (brandId) {
+      this.selectedBrandId = brandId;
+      this.getProductsByBrand();
+    } else {
+      this.fetchProducts();
     }
-    this.fetchBrands();
-    this.fetchCategories();
-    this.getProductsByCategory(); // Fetch products by category if applicable
-    this.getProductsByBrand(); // Fetch products by brand if applicable
+  });
 
-    this.searchService.currentSearchTerm.subscribe(term => {
-      this.searchTerm = term;
-    });
-  }
+  this.fetchBrands();
+  this.fetchCategories();
+
+  this.SearchService.currentSearchTerm.subscribe((searchTerm) => {
+    this.searchTerm = searchTerm;
+    if (searchTerm) {
+      this.selectedCategoryId = '';
+      this.selectedBrandId = '';
+    }
+  });
+}
 
   fetchProducts(): void {
     this.productService.getAllProducts().subscribe({
@@ -201,6 +212,4 @@ export class ProductsComponent implements OnInit {
       });
     }
   }
-
-  
 }

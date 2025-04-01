@@ -112,7 +112,12 @@ export class SecNavBarComponent implements AfterViewInit, OnInit {
   }
 
   onSearchInput(): void {
+    if (this.searchQuery.trim().length > 0) {
+      this.selectedCategory = '';
+      this.currentCategory = '';
+      
+      this.router.navigate(['/products']);
+    }
     this.SearchService.updateSearchTerm(this.searchQuery);
-
   }
 }

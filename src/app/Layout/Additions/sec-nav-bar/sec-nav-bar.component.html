@@ -11,7 +11,7 @@
 
             <div class="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
             <form #searchForm="ngForm" (ngSubmit)="onCategorySelect()" class="hm-searchbox">
-                    <select class="nice-select select-search-category" 
+                    <select  class="nice-select select-search-category" 
                             [(ngModel)]="selectedCategory" 
                             name="category"
                             (change)="onCategorySelect()">
@@ -21,12 +21,12 @@
                         }
                     </select>
                     <input type="text" 
-                    placeholder="Enter your search key ..." 
+                    placeholder="Enter your search product name" 
                     [(ngModel)]="searchQuery" 
                     name="search"
                     (input)="onSearchInput()">
                         
-         <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
+         <button class="li-btn" type="submit" [disabled]="searchForm"><i class="fa fa-search"></i></button>
                 </form>
              
                 <div class="header-middle-right">
