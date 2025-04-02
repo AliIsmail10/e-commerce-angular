@@ -128,24 +128,18 @@
               <form>
                 <ul>
                   <li *ngFor="let brand of visibleBrands">
-                    <!-- Add the brand _id as value to the checkbox input -->
                     <input
                       type="checkbox"
                       [value]="brand._id"
-                      (change)="onBrandChange($event, brand._id)"
                       [checked]="selectedBrandId === brand._id"
-                      name="brand"
+                      (change)="onBrandChange($event, brand._id)"
                     />
-                    <a>{{ brand.name }}</a>
+                    <label>{{ brand.name }}</label>
                   </li>
                 </ul>
               </form>
             </div>
-            <button
-              *ngIf="brands.length > 5"
-              (click)="toggleShowMore('brands')"
-              class="btn btn-link"
-            >
+            <button *ngIf="brands.length > 5" (click)="toggleShowMore('brands')" class="btn btn-link">
               {{ showMoreBrands ? "Show Less" : "Show More" }}
             </button>
           </div>
@@ -158,28 +152,21 @@
               <form>
                 <ul>
                   <li *ngFor="let category of visibleCategories">
-                    <!-- Add the category _id as value to the checkbox input -->
                     <input
                       type="checkbox"
                       [value]="category._id"
-                      (change)="onCategoryChange($event, category._id)"
                       [checked]="selectedCategoryId === category._id"
-                      name="category"
+                      (change)="onCategoryChange($event, category._id)"
                     />
-                    <a>{{ category.name }}</a>
+                    <label>{{ category.name }}</label>
                   </li>
                 </ul>
               </form>
             </div>
-            <button
-              *ngIf="categories.length > 5"
-              (click)="toggleShowMore('categories')"
-              class="btn btn-link"
-            >
+            <button *ngIf="categories.length > 5" (click)="toggleShowMore('categories')" class="btn btn-link">
               {{ showMoreCategories ? "Show Less" : "Show More" }}
             </button>
           </div>
-
           <!-- Tags Box -->
           <div class="sidebar-categores-box mb-sm-0 mb-xs-0">
             <div class="sidebar-title">

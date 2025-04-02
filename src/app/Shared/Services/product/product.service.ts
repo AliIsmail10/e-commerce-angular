@@ -9,36 +9,24 @@ import { Enviroment } from '../../../base/enviroment';
 export class ProductService {
   constructor(private _HttpClient: HttpClient) {}
 
-  // Generic method to get products with optional filters and sorting
-  getProducts(
-    filters: { [key: string]: string } = {},
-    sort?: string
-  ): Observable<any> {
+  getProducts(filters: { [key: string]: string } = {}, sort?: string): Observable<any> {
     let params = new HttpParams();
-
-    // Apply filters (e.g., category, brand, search term)
+    
     for (const key in filters) {
       if (filters[key]) {
         params = params.set(key, filters[key]);
       }
     }
-
-    // Apply sorting if provided
+    
     if (sort) {
-      params = params.set('sort', sort); // e.g., 'price' or '-price'
+      params = params.set('sort', sort);
     }
 
-    return this._HttpClient.get(`${Enviroment.baseUrl}/api/v1/products`, {
-      params,
-    });
+    return this._HttpClient.get(`${Enviroment.baseUrl}/api/v1/products`, { params });
   }
 
   getAllProducts(sort?: string): Observable<any> {
     return this.getProducts({}, sort);
-  }
-
-  searchProducts(query: string, sort?: string): Observable<any> {
-    return this.getProducts({ title: query }, sort);
   }
 
   getDetails(pId: string): Observable<any> {
@@ -51,5 +39,9 @@ export class ProductService {
 
   getProductsByBrand(brandId: string, sort?: string): Observable<any> {
     return this.getProducts({ brand: brandId }, sort);
+  }
+
+  searchProducts(searchTerm: string, sort?: string): Observable<any> {
+    return this.getProducts({ keyword: searchTerm }, sort);
   }
 }
