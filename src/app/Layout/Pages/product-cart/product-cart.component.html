@@ -1,7 +1,7 @@
 <!-- product Cart  -->
 <div class="single-product-wrap">
     <div class="product-image">
-        <a [routerLink]="['/products', product?.slug]">
+        <a [routerLink]="['/productDetails', product._id]">
             <img [src]="product?.imageCover" [alt]="product?.title">
         </a>
     </div>

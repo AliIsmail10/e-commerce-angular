@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './Layout/Pages/home/home.component';
 import { NotFoundComponent } from './Layout/Additions/not-found/not-found.component';
 import { AuthGuard } from './Shared/Guards/auth.guard';
+import { ProductsComponent } from './Layout/Pages/products/products.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -14,11 +15,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'products',
-    loadComponent: () =>
-      import('./Layout/Pages/products/products.component').then(
-        (m) => m.ProductsComponent
-      ),
+    path: 'products', component:ProductsComponent
   },
   {
     path:'wishlist',

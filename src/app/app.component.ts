@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from "./Layout/Additions/navbar/navbar.component";
 import { SecNavBarComponent } from "./Layout/Additions/sec-nav-bar/sec-nav-bar.component";
@@ -15,7 +15,5 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 })
 export class AppComponent {
   title = 'E-commerceAngular';
-  constructor(private spinner: NgxSpinnerService) {}
-
-  
+  constructor(private spinner: NgxSpinnerService) {}  
 }

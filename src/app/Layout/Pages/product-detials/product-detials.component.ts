@@ -40,6 +40,8 @@ export class ProductDetialsComponent implements OnInit {
         }
       });
     });
+
+    
   }
 
   incrementQuantity(): void {
