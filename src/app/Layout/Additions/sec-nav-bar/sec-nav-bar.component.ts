@@ -127,15 +127,23 @@ export class SecNavBarComponent implements AfterViewInit, OnInit {
   }
 
   onSearchInput(): void {
+    // Update the search term through the service
+    this.SearchService.updateSearchTerm(this.searchQuery);
+    
+    // Clear other filters when searching
     if (this.searchQuery.trim().length > 0) {
       this.selectedCategory = '';
       this.currentCategory = '';
-
-      this.router.navigate(['/products']);
+      this.router.navigate(['/products'], { 
+        queryParams: { 
+          'category[in]': null,
+          'brand': null,
+          'sort': null
+        },
+        queryParamsHandling: 'merge'
+      });
     }
-    this.SearchService.updateSearchTerm(this.searchQuery);
   }
-
   removeItem(productId: string) {
     this.cartService.RemoveSpecificCartItem(productId).subscribe({
       next: () => {

@@ -30,6 +30,7 @@ export class ProductsComponent implements OnInit {
   selectedBrandId: string = '';
   searchTerm: string = '';
   sortBy: string = '';
+  filteredProducts: Product[] = [];
 
   constructor(
     private productService: ProductService,
@@ -41,11 +42,50 @@ export class ProductsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    
+      
     this.fetchBrands();
     this.fetchCategories();
-    this.setupSearchAndFilters();
-  }
+    
+    // Handle search term changes
+    this.searchService.currentSearchTerm.subscribe(searchTerm => {
+      this.searchTerm = searchTerm;
+      this.applyFilters();
+    });
 
+    // Handle route changes for filters
+    this.route.queryParamMap.subscribe(params => {
+      this.selectedCategoryId = params.get('category[in]') || '';
+      this.selectedBrandId = params.get('brand') || '';
+      this.sortBy = params.get('sort') || '';
+      this.loadProducts();
+    });
+  }
+  loadProducts(): void {
+    this.loading = true;
+    
+    let apiCall;
+    if (this.selectedCategoryId) {
+      apiCall = this.productService.getProductsByCategory(this.selectedCategoryId, this.sortBy);
+    } else if (this.selectedBrandId) {
+      apiCall = this.productService.getProductsByBrand(this.selectedBrandId, this.sortBy);
+    } else {
+      apiCall = this.productService.getAllProducts(this.sortBy);
+    }
+
+    apiCall.subscribe({
+      next: response => {
+        this.products = response.data;
+        this.filteredProducts = [...this.products]; // Initialize filtered products
+        this.applyFilters();
+        this.loading = false;
+      },
+      error: error => {
+        console.error('Error fetching products:', error);
+        this.loading = false;
+      }
+    });
+  }
   setupSearchAndFilters(): void {
     combineLatest([
       this.route.queryParamMap,
@@ -59,33 +99,14 @@ export class ProductsComponent implements OnInit {
       this.loadProducts();
     });
   }
-
-  loadProducts(): void {
-    this.loading = true;
-    let observable;
-
-    if (this.searchTerm) {
-      observable = this.productService.searchProducts(this.searchTerm, this.sortBy);
-    } else if (this.selectedCategoryId) {
-      observable = this.productService.getProductsByCategory(this.selectedCategoryId, this.sortBy);
-    } else if (this.selectedBrandId) {
-      observable = this.productService.getProductsByBrand(this.selectedBrandId, this.sortBy);
-    } else {
-      observable = this.productService.getAllProducts(this.sortBy);
-    }
-
-    observable.subscribe({
-      next: (response) => {
-        this.products = response.data;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching products:', error);
-        this.loading = false;
-      }
-    });
+  
+  applyFilters(): void {
+    this.filteredProducts = [...this.products];
+    
   }
 
+
+ 
   fetchBrands(): void {
     this.brandsService.getAllBrands().subscribe({
       next: (response) => {
