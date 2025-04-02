@@ -130,7 +130,7 @@ export class ProductDetialsComponent implements OnInit {
     ],
     dots: false,
     margin: 20,
-   
+   rtl: true
   };
   
 }

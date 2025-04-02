@@ -48,3 +48,19 @@
 .owl-carousel .owl-nav button.owl-next {
   margin-right: 20px;
 }
+
+.slider-content {
+  text-align: left;
+  left: 1%;
+  right: auto;
+}
+
+body.rtl .slider-content {
+  text-align: left;
+  
+  left: auto;
+}
+
+a{
+  text-decoration:none;
+}

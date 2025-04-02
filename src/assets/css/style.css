@@ -1400,6 +1400,9 @@ textarea:focus {
 		line-height: 22px;
 		font-size: 12px;
 }
+.ht-setting-list {
+width:6.5rem;
+}
 .ht-setting-list > li {
 		transition: all 0.3s ease-in-out;
 }

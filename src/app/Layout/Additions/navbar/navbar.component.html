@@ -7,8 +7,8 @@
             <div class="header-top-left">
               <ul class="phone-wrap">
                 <li>
-                  <span>Telephone Enquiry:</span
-                  ><a href="#">(+123) 123 321 345</a>
+                  <span class="mx-2">{{"Telephone Enquiry:" | translate}}</span
+                  ><a>{{"(+123) 123 321 345" | translate}}</a>
                 </li>
               </ul>
             </div>
@@ -18,9 +18,9 @@
               <ul class="ht-menu">
                 @if(islogging){
                   <li *ngIf="userName">
-                    <span>Hello, {{ userName }}!</span>
-                    <a class="active ms-4" (click)="logout()"
-                      >Logout</a
+                    <span>{{"Hello" | translate}} , {{ userName }}!</span>
+                    <a class="active mx-3" (click)="logout()"
+                      >{{"Logout" | translate}}</a
                     >
                   </li>
                 }
@@ -33,34 +33,35 @@
                       class=""
                       routerLink="/register"
                       routerLinkActive="active"
-                      >Register</a
+                      >{{"Register" | translate}}</a
                     >
                   </li>
                   
                   <li><a routerLink="/login" 
                     routerLinkActive="active"
-                    >Sign In</a></li>
+                    >{{"sign in" |translate}}</a></li>
                 }
 
                 <li>
-                  <span class="language-selector-wrapper">Language :</span>
-                  <div class="ht-language-trigger"><span>English</span></div>
+                  <span class="language-selector-wrapper">{{"Language" | translate}} :</span>
+                  <div class="ht-language-trigger"><span>{{"English" | translate}}</span></div>
                   <div class="language ht-language">
-                    <ul class="ht-setting-list minicart-button">
+                    <ul class="ht-setting-list">
                       <li class="active">
-                        <a
-                          ><img
+                        <a (click)="changeLanguage('en')"
+                          ><img  class="mx-2"
                             src="/images/menu/flag-icon/1.jpg"
                             alt=""
-                          />English</a
+                          />{{"English" | translate}}</a
                         >
                       </li>
                       <li>
                         <a
-                          ><img class="w-25"
+                        (click)="changeLanguage('ar')"
+                          ><img class="w-25 mx-2"
                             src="data:image/png;base64,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"
                             alt=""
-                          />Arabic</a
+                          />{{"Arabic" | translate}}</a
                         >
                       </li>
                     </ul>

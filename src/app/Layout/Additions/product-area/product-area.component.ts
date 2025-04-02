@@ -3,11 +3,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { ProductCartComponent } from '../../Pages/product-cart/product-cart.component';
 import { ProductService } from '../../../Shared/Services/product/product.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-area',
   standalone: true, 
-  imports: [CommonModule, CarouselModule ,ProductCartComponent], 
+  imports: [CommonModule, CarouselModule ,ProductCartComponent,TranslateModule], 
   templateUrl: './product-area.component.html',
   styleUrl: './product-area.component.css'
 })
@@ -31,7 +32,9 @@ export class ProductAreaComponent implements OnInit {
       576: { items: 3 },  
       768: { items: 4 }, 
       992: { items: 5 }
-    }
+    },
+   rtl: true
+
   };
   constructor(private productService: ProductService) {}
 

@@ -67,7 +67,7 @@
                 <ul class="minicart-product-list">
                   <li *ngFor="let item of cartItems()">
                     <a
-                      [routerLink]="['/product', item.product.id]"
+                      [routerLink]="['/productDetails', item.product.id]"
                       class="minicart-product-image"
                     >
                       <img
@@ -77,16 +77,16 @@
                     </a>
                     <div class="minicart-product-details">
                       <h6>
-                        <a [routerLink]="['/product', item.product.id]">{{
+                        <a [routerLink]="['/productDetails', item.product.id]">{{
                           item.product.title
                         }}</a>
                       </h6>
-                      <span
+                      <span class=""
                         >{{ item.price | currency }} x {{ item.count }}</span
                       >
                     </div>
                     <button
-                      class="close"
+                      class="close border-0"
                       title="Remove"
                       (click)="removeItem(item.product.id)"
                     >

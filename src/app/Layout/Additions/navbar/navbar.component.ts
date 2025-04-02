@@ -3,18 +3,20 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../Shared/Services/auth/auth.service';
 import jQuery from 'jquery';
+import { TranslationService } from '../../../Shared/Services/translation/translation.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule,TranslateModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent implements OnInit ,AfterViewInit {
+export class NavbarComponent implements OnInit  {
   userName: string = '';
   islogging: boolean = false;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService , private _TranslationService:TranslationService) {
     this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
       this.islogging = isLoggedIn;
     });
@@ -33,7 +35,10 @@ export class NavbarComponent implements OnInit ,AfterViewInit {
     this.authService.logout();
   }
 
-  ngAfterViewInit() {
-
+  changeLanguage(language: string) {
+    this._TranslationService.changeLanguage(language);;
+    jQuery('.lang-dropdown').removeClass('show');
+    jQuery('.lang-dropdown').find('.dropdown-menu').removeClass('show');
   }
+ 
 }
