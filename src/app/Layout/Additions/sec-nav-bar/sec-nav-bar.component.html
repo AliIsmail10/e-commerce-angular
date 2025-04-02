@@ -54,7 +54,7 @@
             </li>
 
             <!-- Mini Cart -->
-            <li class="hm-minicart" style="z-index: 2000">
+            <li class="hm-minicart">
               <div class="hm-minicart-trigger">
                 <span class="item-icon"></span>
                 <span class="item-text"
@@ -63,7 +63,7 @@
                 </span>
               </div>
               <span></span>
-              <div class="minicart">
+              <div class="minicart" style="z-index: 2000">
                 <ul class="minicart-product-list">
                   <li *ngFor="let item of cartItems()">
                     <a
