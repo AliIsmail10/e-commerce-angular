@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, OnInit, Renderer2, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  Renderer2,
+  OnDestroy,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { WishlistService } from '../../../Shared/Services/wishlist/wishlist.service';
@@ -17,7 +24,7 @@ interface WishlistItem {
   standalone: true,
   imports: [RouterLink, CommonModule],
   templateUrl: './product-cart.component.html',
-  styleUrls: ['./product-cart.component.css']
+  styleUrls: ['./product-cart.component.css'],
 })
 export class ProductCartComponent implements OnInit, OnDestroy {
   @Input() product: any;
@@ -36,14 +43,16 @@ export class ProductCartComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.authSubscription = this.authService.isLoggedIn$.subscribe(loggedIn => {
-      this.isLoggedIn = loggedIn;
-      if (loggedIn) {
-        this.fetchWishlist();
-      } else {
-        this.wishlistProductIds = [];
+    this.authSubscription = this.authService.isLoggedIn$.subscribe(
+      (loggedIn) => {
+        this.isLoggedIn = loggedIn;
+        if (loggedIn) {
+          this.fetchWishlist();
+        } else {
+          this.wishlistProductIds = [];
+        }
       }
-    });
+    );
   }
 
   ngOnDestroy(): void {
@@ -58,7 +67,8 @@ export class ProductCartComponent implements OnInit, OnDestroy {
 
   private updateWishlistIcons(): void {
     setTimeout(() => {
-      const wishlistButtons = this.el.nativeElement.querySelectorAll('.wishlist-btn');
+      const wishlistButtons =
+        this.el.nativeElement.querySelectorAll('.wishlist-btn');
       wishlistButtons.forEach((button: HTMLElement) => {
         const productId = button.getAttribute('data-product-id');
         const icon = button.querySelector('i');
@@ -85,25 +95,25 @@ export class ProductCartComponent implements OnInit, OnDestroy {
       },
       error: (err: any) => {
         this.toastr.error('Failed to add product to cart');
-      }
+      },
     });
   }
 
   fetchWishlist(): void {
     this.wishlistService.GetLoggedUserWishlist().subscribe({
       next: (wishList: { data?: WishlistItem[] }) => {
-        this.wishlistProductIds = wishList.data?.map(item => item.id) || [];
+        this.wishlistProductIds = wishList.data?.map((item) => item.id) || [];
         this.updateWishlistIcons();
       },
       error: (error: any) => {
         console.error('Error fetching wishlist:', error);
-      }
+      },
     });
   }
 
   toggleWishlist(productId: string, event: Event): void {
     event.stopPropagation();
-    
+
     if (!this.isLoggedIn) {
       this.toastr.error('Please login to manage your wishlist');
       this.router.navigate(['/login']);
@@ -115,7 +125,7 @@ export class ProductCartComponent implements OnInit, OnDestroy {
     if (!iconElement) return;
 
     const isInWishlist = this.wishlistProductIds.includes(productId);
-    
+
     if (!isInWishlist) {
       this.renderer.addClass(button, 'added');
       setTimeout(() => this.renderer.removeClass(button, 'added'), 500);
@@ -137,20 +147,28 @@ export class ProductCartComponent implements OnInit, OnDestroy {
       },
       error: (err: any) => {
         this.toastr.error('Failed to add to wishlist');
-      }
+      },
     });
   }
 
   private removeFromWishlist(productId: string, iconElement: Element): void {
     this.wishlistService.RemoveProductFromWishlist(productId).subscribe({
       next: () => {
-        this.wishlistProductIds = this.wishlistProductIds.filter(id => id !== productId);
+        this.wishlistProductIds = this.wishlistProductIds.filter(
+          (id) => id !== productId
+        );
         this.updateIconStyle(iconElement, false);
         this.toastr.success('Removed from wishlist');
       },
       error: (err: any) => {
         this.toastr.error('Failed to remove from wishlist');
-      }
+      },
+    });
+  }
+
+  viewProductsByCategory(categoryId: string) {
+    this.router.navigate(['/products'], {
+      queryParams: { 'category[in]': categoryId },
     });
   }
 }
