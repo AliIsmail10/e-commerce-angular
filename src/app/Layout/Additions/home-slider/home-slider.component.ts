@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home-slider',
   standalone: true,
-  imports: [CommonModule, CarouselModule],
+  imports: [CommonModule, CarouselModule, RouterModule],
   templateUrl: './home-slider.component.html',
-  styleUrls: ['./home-slider.component.css']
+  styleUrls: ['./home-slider.component.css'],
 })
 export class HomeSliderComponent {
   carouselOptions = {
@@ -18,13 +19,13 @@ export class HomeSliderComponent {
     nav: true, // Enable navigation buttons
     navText: [
       '<i class="fa fa-chevron-left fs-4"></i>', // Custom left arrow
-      '<i class="fa fa-chevron-right fs-4"></i>' // Custom right arrow
+      '<i class="fa fa-chevron-right fs-4"></i>', // Custom right arrow
     ],
     dots: false,
     responsive: {
       0: { items: 1 },
       768: { items: 1 },
-      992: { items: 1 }
-    }
+      992: { items: 1 },
+    },
   };
 }
