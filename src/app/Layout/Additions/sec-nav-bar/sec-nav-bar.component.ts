@@ -15,6 +15,7 @@ import { ProductService } from '../../../Shared/Services/product/product.service
 import { SearchService } from '../../../Shared/Services/Search/search.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../Shared/Services/auth/auth.service';
 
 @Component({
   selector: 'app-sec-nav-bar',
@@ -37,18 +38,25 @@ export class SecNavBarComponent implements AfterViewInit, OnInit {
     private router: Router,
     private SearchService: SearchService,
     private toastr: ToastrService
+    ,private Auth:AuthService
   ) {}
 
   ngOnInit(): void {
     this.fetchCategories();
-    this.subscribeToCounters();
-    this.loadCartItems();
-
-    this.cartService.cartUpdates$.subscribe(() => {
-      this.loadCartItems();
+  
+    this.Auth.isLoggedIn$.subscribe((isLoggedIn) => {
+      if (isLoggedIn) {
+        this.loadCartItems();
+      } else {
+        this.cartItems.set([]);
+        this.cartId.set('');
+        this.total.set(0);
+      }
     });
+  
+    this.subscribeToCounters();
   }
-
+  
   private subscribeToCounters() {
     this.cartService.CartCount$.subscribe((count) => {
       this.CartCount = count;
@@ -59,6 +67,7 @@ export class SecNavBarComponent implements AfterViewInit, OnInit {
     });
   }
   loadCartItems() {
+    
     this.cartService.GetLoggedUserCart().subscribe({
       next: (response) => {
         if (response?.data?.products) {

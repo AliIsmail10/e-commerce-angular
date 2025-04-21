@@ -35,7 +35,6 @@ export class AuthService {
   }
   logout() {
     localStorage.removeItem('userToken');
-    localStorage.removeItem('currentPage');
     this.userData.next(null);
     this._isLoggedIn.set(false);
     this._Router.navigate(['/login']);
@@ -43,7 +42,7 @@ export class AuthService {
 
   sentRegister(userData: UserData): Observable<any> {
     return this._HttpClient.post(
-      `${Enviroment.baseUrl}/api/v1/auth/signup`,
+      `https://localhost:7093/api/Account/login`,
       userData
     );
   }
@@ -67,27 +66,9 @@ export class AuthService {
   }
 
 
-  sendEmailApi(email: string): Observable<any> {
-    return this._HttpClient.post(
-      `${Enviroment.baseUrl}/api/v1/auth/forgotPasswords`,
-      email
-    );
-  }
-
-  sendCodeApi(code: string): Observable<any> {
-    return this._HttpClient.post(
-      `${Enviroment.baseUrl}/api/v1/auth/verifyResetCode`,
-      code
-    );
-  }
-
-  resetDataApi(restData: any): Observable<any> {
-    return this._HttpClient.put(
-      `https://ecommerce.routemisr.com/api/v1/auth/resetPassword`,
-      restData
-    );
-  }
-
+  
+  
+  
   getUserData() {
     const user =
       this.userData.value ||

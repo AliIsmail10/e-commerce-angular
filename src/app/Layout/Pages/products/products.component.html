@@ -94,32 +94,13 @@
       <!-- Sidebar -->
       <div class="col-lg-3 order-2 order-lg-1">
         <!-- Categories Box -->
-        <div class="sidebar-categores-box mt-sm-30 mt-xs-30">
-          <div class="sidebar-title">
-            <h2>Laptop</h2>
-          </div>
-          <div class="category-sub-menu">
-            <ul>
-              <li class="has-sub">
-                <a>Prime Video</a>
-                <ul>
-                  <li><a>All Videos</a></li>
-                  <li><a>Blouses</a></li>
-                  <li><a>Evening Dresses</a></li>
-                  <li><a>Summer Dresses</a></li>
-                </ul>
-              </li>
-              <!-- More categories here -->
-            </ul>
-          </div>
-        </div>
+  
 
         <!-- Filter Box -->
         <div class="sidebar-categores-box">
           <div class="sidebar-title">
             <h2>Filter By</h2>
           </div>
-          <button class="btn-clear-all mb-sm-30 mb-xs-30">Clear all</button>
 
           <!-- Brands Filter -->
           <div class="filter-sub-area">
@@ -128,7 +109,7 @@
               <form>
                 <ul>
                   <li *ngFor="let brand of visibleBrands">
-                    <input
+                    <input class="mx-2"
                       type="checkbox"
                       [value]="brand._id"
                       [checked]="selectedBrandId === brand._id"
@@ -153,6 +134,7 @@
                 <ul>
                   <li *ngFor="let category of visibleCategories">
                     <input
+                    class="mx-2"
                       type="checkbox"
                       [value]="category._id"
                       [checked]="selectedCategoryId === category._id"
@@ -168,19 +150,7 @@
             </button>
           </div>
           <!-- Tags Box -->
-          <div class="sidebar-categores-box mb-sm-0 mb-xs-0">
-            <div class="sidebar-title">
-              <h2>Laptop</h2>
-            </div>
-            <div class="category-tags">
-              <ul>
-                <li><a>Devita</a></li>
-                <li><a>Cameras</a></li>
-                <li><a>Sony</a></li>
-                <!-- More tags here -->
-              </ul>
-            </div>
-          </div>
+      
         </div>
         <!-- End Sidebar -->
       </div>

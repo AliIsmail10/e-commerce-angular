@@ -3,7 +3,7 @@ import { OrderService } from '../../../Shared/Services/order/order.service';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
-import { CartItem, Order } from '../../../Shared/Interfaces/product';
+import { Order } from '../../../Shared/Interfaces/product';
 
 
 @Component({
@@ -22,19 +22,19 @@ export class OrderComponent implements OnInit {
   paymentMethodChartData!: ChartData<'doughnut'>;
   
   private goldenPalette = [
-    '#FED700', // Primary gold
-    '#FFE44D', // Lighter gold
-    '#F5C400', // Darker gold
-    '#FFF5CC', // Very light gold
-    '#D4AF37'  // Metallic gold
+    '#FED700', 
+    '#FFE44D', 
+    '#F5C400', 
+    '#FFF5CC', 
+    '#D4AF37'  
   ];
 
   private complementaryPalette = [
-    '#2E3A59', // Dark blue
-    '#5C6BC0', // Medium blue
-    '#8BC34A', // Green
-    '#FF7043', // Orange
-    '#7E57C2'  // Purple
+    '#2E3A59', 
+    '#5C6BC0', 
+    '#8BC34A', 
+    '#FF7043',
+    '#7E57C2'  
   ];
 
   chartOptions: ChartOptions = {
