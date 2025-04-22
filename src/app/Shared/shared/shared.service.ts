@@ -30,20 +30,7 @@ export class SharedService {
     });
   }
 
-  addProductToCart(productId: string) {
-    this.isLoding = true;
-    return this._CartService.AddProducttoCart(productId).subscribe({
-      next: (res: any) => {
-        this.isLoding = false;
-        this._CartService.cartItem.next(res.numOfCartItems);
-      },
-      error: (error) => {
-        this.isLoding = false;
-        console.error('Error adding product to cart: ', error);
-      },
-    });
-  }
-
+  
   fetchWishlist() {
     return this._WishlistService.GetLoggedUserWishlist().subscribe({
       next: (wishList) => {

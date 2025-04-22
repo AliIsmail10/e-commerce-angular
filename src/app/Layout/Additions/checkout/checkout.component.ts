@@ -62,14 +62,12 @@ export class CheckoutComponent implements OnInit {
   payment() {
     if (this.cartFrom.invalid) {
       this.cartFrom.markAllAsTouched();
-      this.showErrorMessage = true; // Show the alert
-      
-      // Optionally keep toastr as well
+      this.showErrorMessage = true;
       this.toastr.error('Please fill all required fields correctly.', 'Invalid Form');
       return;
     }
 
-    this.showErrorMessage = false; // Hide the alert if valid
+    this.showErrorMessage = false; 
     this.isLoading = true;
     this._CheckoutService.CreateCashOrder(this.cartId, this.cartFrom.value).subscribe({
       next: (res: any) => {
@@ -79,7 +77,7 @@ export class CheckoutComponent implements OnInit {
       error: (err: any) => {
         
         this.isLoading = false;
-        this.showErrorMessage = true; // Show alert on payment failure
+        this.showErrorMessage = true; 
         this.toastr.error('Payment failed. Please try again.', 'Error');
       },
     });
