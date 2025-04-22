@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CategoryService } from '../../../Shared/Services/category/category.service';
-import { ProductService } from '../../../Shared/Services/product/product.service';
-import { ProductCartComponent } from '../product-cart/product-cart.component';
-import { SearchService } from '../../../Shared/Services/Search/search.service';
+import { combineLatest } from 'rxjs';
 import { Product } from '../../../Shared/Interfaces/product';
 import { FilterPipe } from '../../../Shared/Pipe/filter.pipe';
 import { BrandsService } from '../../../Shared/Services/brands/brands.service';
-import { combineLatest } from 'rxjs';
+import { CategoryService } from '../../../Shared/Services/category/category.service';
+import { ProductService } from '../../../Shared/Services/product/product.service';
+import { SearchService } from '../../../Shared/Services/Search/search.service';
+import { ProductCartComponent } from '../product-cart/product-cart.component';
 
 @Component({
   selector: 'app-products',
@@ -42,19 +42,15 @@ export class ProductsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    
-      
     this.fetchBrands();
     this.fetchCategories();
-    
-    // Handle search term changes
-    this.searchService.currentSearchTerm.subscribe(searchTerm => {
+
+    this.searchService.currentSearchTerm.subscribe((searchTerm) => {
       this.searchTerm = searchTerm;
       this.applyFilters();
     });
 
-    // Handle route changes for filters
-    this.route.queryParamMap.subscribe(params => {
+    this.route.queryParamMap.subscribe((params) => {
       this.selectedCategoryId = params.get('category[in]') || '';
       this.selectedBrandId = params.get('brand') || '';
       this.sortBy = params.get('sort') || '';
@@ -63,57 +59,60 @@ export class ProductsComponent implements OnInit {
   }
   loadProducts(): void {
     this.loading = true;
-    
+
     let apiCall;
     if (this.selectedCategoryId) {
-      apiCall = this.productService.getProductsByCategory(this.selectedCategoryId, this.sortBy);
+      apiCall = this.productService.getProductsByCategory(
+        this.selectedCategoryId,
+        this.sortBy
+      );
     } else if (this.selectedBrandId) {
-      apiCall = this.productService.getProductsByBrand(this.selectedBrandId, this.sortBy);
+      apiCall = this.productService.getProductsByBrand(
+        this.selectedBrandId,
+        this.sortBy
+      );
     } else {
       apiCall = this.productService.getAllProducts(this.sortBy);
     }
 
     apiCall.subscribe({
-      next: response => {
+      next: (response) => {
         this.products = response.data;
-        this.filteredProducts = [...this.products]; // Initialize filtered products
+        this.filteredProducts = [...this.products];
         this.applyFilters();
         this.loading = false;
       },
-      error: error => {
+      error: (error) => {
         console.error('Error fetching products:', error);
         this.loading = false;
-      }
+      },
     });
   }
   setupSearchAndFilters(): void {
     combineLatest([
       this.route.queryParamMap,
-      this.searchService.currentSearchTerm
+      this.searchService.currentSearchTerm,
     ]).subscribe(([params, searchTerm]) => {
       this.searchTerm = searchTerm || '';
       this.selectedCategoryId = params.get('category[in]') || '';
       this.selectedBrandId = params.get('brand') || '';
       this.sortBy = params.get('sort') || '';
-      
+
       this.loadProducts();
     });
   }
-  
+
   applyFilters(): void {
     this.filteredProducts = [...this.products];
-    
   }
 
-
- 
   fetchBrands(): void {
     this.brandsService.getAllBrands().subscribe({
       next: (response) => {
         this.brands = response.data;
         this.updateVisibleBrands();
       },
-      error: (error) => console.error('Error fetching brands:', error)
+      error: (error) => console.error('Error fetching brands:', error),
     });
   }
 
@@ -123,16 +122,20 @@ export class ProductsComponent implements OnInit {
         this.categories = response.data;
         this.updateVisibleCategories();
       },
-      error: (error) => console.error('Error fetching categories:', error)
+      error: (error) => console.error('Error fetching categories:', error),
     });
   }
 
   updateVisibleBrands(): void {
-    this.visibleBrands = this.showMoreBrands ? this.brands : this.brands.slice(0, 5);
+    this.visibleBrands = this.showMoreBrands
+      ? this.brands
+      : this.brands.slice(0, 5);
   }
 
   updateVisibleCategories(): void {
-    this.visibleCategories = this.showMoreCategories ? this.categories : this.categories.slice(0, 5);
+    this.visibleCategories = this.showMoreCategories
+      ? this.categories
+      : this.categories.slice(0, 5);
   }
 
   toggleShowMore(type: 'brands' | 'categories'): void {
@@ -147,9 +150,10 @@ export class ProductsComponent implements OnInit {
 
   updateQueryParams(): void {
     const queryParams: any = {};
-    
+
     if (this.searchTerm) queryParams['search'] = this.searchTerm;
-    if (this.selectedCategoryId) queryParams['category[in]'] = this.selectedCategoryId;
+    if (this.selectedCategoryId)
+      queryParams['category[in]'] = this.selectedCategoryId;
     if (this.selectedBrandId) queryParams['brand'] = this.selectedBrandId;
     if (this.sortBy) queryParams['sort'] = this.sortBy;
 
@@ -162,15 +166,15 @@ export class ProductsComponent implements OnInit {
 
   onCategoryChange(event: any, categoryId: string): void {
     this.selectedCategoryId = event.target.checked ? categoryId : '';
-    this.selectedBrandId = ''; // Reset brand when category changes
-    this.searchTerm = ''; // Reset search when category changes
+    this.selectedBrandId = '';
+    this.searchTerm = '';
     this.updateQueryParams();
   }
 
   onBrandChange(event: any, brandId: string): void {
     this.selectedBrandId = event.target.checked ? brandId : '';
-    this.selectedCategoryId = ''; // Reset category when brand changes
-    this.searchTerm = ''; // Reset search when brand changes
+    this.selectedCategoryId = '';
+    this.searchTerm = '';
     this.updateQueryParams();
   }
 
