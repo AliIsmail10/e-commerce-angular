@@ -42,7 +42,7 @@ export class AuthService {
 
   sentRegister(userData: UserData): Observable<any> {
     return this._HttpClient.post(
-      `https://localhost:7093/api/Account/login`,
+      `${Enviroment.baseUrl}/api/v1/auth/signup`,
       userData
     );
   }
@@ -54,7 +54,6 @@ export class AuthService {
     );
   }
 
-
   deCodeUserData(token: string) {
     try {
       const decodedUser = jwtDecode(token);
@@ -65,10 +64,6 @@ export class AuthService {
     }
   }
 
-
-  
-  
-  
   getUserData() {
     const user =
       this.userData.value ||
