@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './Layout/Pages/home/home.component';
 import { NotFoundComponent } from './Layout/Additions/not-found/not-found.component';
-import { AuthGuard } from './Shared/Guards/auth.guard';
+import { HomeComponent } from './Layout/Pages/home/home.component';
 import { ProductsComponent } from './Layout/Pages/products/products.component';
+import { AuthGuard } from './Shared/Guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -15,11 +15,15 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'products', component:ProductsComponent
+    path: 'products',
+    component: ProductsComponent,
   },
   {
-    path:'wishlist',
-    loadComponent: () =>import('./Layout/Pages/wish-list/wish-list.component').then((m)=>m.WishListComponent),
+    path: 'wishlist',
+    loadComponent: () =>
+      import('./Layout/Pages/wish-list/wish-list.component').then(
+        (m) => m.WishListComponent
+      ),
     canActivate: [AuthGuard],
   },
   {
@@ -31,10 +35,11 @@ export const routes: Routes = [
   },
   {
     path: 'order',
-    loadComponent: () =>import('./Layout/Pages/order/order.component').then(
-      (m) => m.OrderComponent),
+    loadComponent: () =>
+      import('./Layout/Pages/order/order.component').then(
+        (m) => m.OrderComponent
+      ),
     canActivate: [AuthGuard],
-
   },
 
   {
@@ -54,8 +59,10 @@ export const routes: Routes = [
   {
     path: 'checkout/:Cid',
     canActivate: [AuthGuard],
-    loadComponent: () =>import('./Layout/Additions/checkout/checkout.component').then(
-      (m) => m.CheckoutComponent)
+    loadComponent: () =>
+      import('./Layout/Additions/checkout/checkout.component').then(
+        (m) => m.CheckoutComponent
+      ),
   },
   {
     path: 'categories',
@@ -64,13 +71,7 @@ export const routes: Routes = [
         (m) => m.CategoriesComponent
       ),
   },
-  {
-    path: 'brandDeatils/:id',
-    loadComponent: () =>
-      import('./Layout/Pages/details-brand/details-brand.component').then(
-        (m) => m.DetailsBrandComponent
-      ),
-  },
+
   {
     path: 'productDetails/:id',
     loadComponent: () =>
@@ -78,13 +79,7 @@ export const routes: Routes = [
         (m) => m.ProductDetialsComponent
       ),
   },
-  {
-    path: 'categoryDetails/:id',
-    loadComponent: () =>
-      import(
-        './Layout/Pages/specific-category/specific-category.component'
-      ).then((m) => m.SpecificCategoryComponent),
-  },
+
   {
     path: 'login',
     loadComponent: () =>
@@ -100,6 +95,6 @@ export const routes: Routes = [
         (m) => m.RegisterComponent
       ),
   },
-  
+
   { path: '**', component: NotFoundComponent },
 ];
